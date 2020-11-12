@@ -3,7 +3,7 @@ Version: 0.02
 Section: misc                                                                                            
 Priority: optional                                                                                       
 Architecture: all
-Depends:
+Depends: python3-configobj
 Maintainer: Jani Janttari <janttari@yandex.ru>
 Description:
  -

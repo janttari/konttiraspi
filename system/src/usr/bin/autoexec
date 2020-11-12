@@ -9,24 +9,28 @@ date >>/tmp/autoexec.txt
 ### mesh client ###
 if [[ "$mesh_type" == "client" ]]; then
     echo mesh  client  >>/tmp/autoexec.txt
+    /opt/konttiraspi/mesh-client/meshclient up &
 fi
 
 ### mesh gateway ###
 if [[ "$mesh_type" == "gateway" ]]; then
     echo mesh  gateway  >>/tmp/autoexec.txt
+    /opt/konttiraspi/mesh-gateway/meshgateway &
 fi
 
 ### sähkömittari server ###
 if [[ "$sahkomittari_type" == "server" ]]; then
     echo sähkömittari server  >>/tmp/autoexec.txt
+    /opt/konttiraspi/sahkomittari-server/sahkomittari-server.py &
 fi
 
 ### sähkömittari client ###
 if [[ "$sahkomittari_type" == "client" ]]; then
     echo sähkömittari client otetaan yhteys kohteeseen $sahkomittari_host  >>/tmp/autoexec.txt
+    /opt/konttiraspi/sahkomittari-client/raspisahkomittari.py &
 fi
 
 
 
 
-echo $mesh_ip  >>/tmp/autoexec.txt
+echo mesh-ip $mesh_ip  >>/tmp/autoexec.txt

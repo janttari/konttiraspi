@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 #!!! lisää python-serial riippuvuuksiin ja poista adafruit RPi.GPIO
 #
-import time, os, sys, socket, threading, websocket, configparser, serial, json, adafruit_dht
+import time, os, sys, socket, threading, websocket, serial, json, adafruit_dht
+from configobj import ConfigObj
 #import board
 #----------------------------------------------------------------
 DEBUG=False
 skriptinHakemisto=os.path.dirname(os.path.realpath(__file__)) #Tämän skriptin fyysinen sijainti configia varten
-config = configparser.ConfigParser(inline_comment_prefixes=('#', ';'))
-config.read(skriptinHakemisto+'/sahkomittari.ini')
+config=ConfigObj('/boot/asetukset.txt')
 
 class Mittaaja(): # TÄMÄ LUOKKA HOITAA VARSINAISEN PINNIN LUKEMISEN JA KULUTUKSEEN LIITTYVÄN LASKENNAN --------------------------
     def __init__(self, callback):
@@ -16,18 +16,18 @@ class Mittaaja(): # TÄMÄ LUOKKA HOITAA VARSINAISEN PINNIN LUKEMISEN JA KULUTUK
         self.lampo=-123.0
         self.kosteus=-124.0
         self.edArduinonPulssiMaara=0 #edellinen arduinon ilmoittama pulssilukema jotta voidaan laskea lisäys
-        self.sarjaportti=config['yleiset']['sarjaportti']
+        self.sarjaportti=config.get('sm_serial')
         self.pulssilaskuri = -1 #lasketaan tähän pulssit
-        self.maxLahetysTiheys=float(config['yleiset']['maxtiheys'])
-        self.maxAliveTiheys=float(config['yleiset']['alive'])
-        self.imp=int(config['yleiset']['imp'])
+        self.maxLahetysTiheys=float(config.get('sm_maxtiheys'))
+        self.maxAliveTiheys=float(config.get('sm_alive'))
+        self.imp=int(config.get('sm_imp'))
         self.viimWsLahetys = 0 #unix aika, milloin on viimeksi lähetetty lukemat
         self.viimWsPulssiMaara = 0 #viimeisen lähetyksen pulssimäärä
         self.viimWsLahetysAika = 0  #viimeisimmän pulssin aikaleima
         self.sarjaporttiLukija = threading.Thread(target=self.lueSarjaportti) #Lukee pinnin tilan prosessi
         self.sarjaporttiLukija.start()
-        if "lampopinni" in config['yleiset']:
-            self.dhtDevice = adafruit_dht.DHT22(config['yleiset']['lampopinni'])
+        if config.get('sm_dhtpin')is not None:
+            self.dhtDevice = adafruit_dht.DHT22(cofig.get('sm_dhtpin'))
         else:
             self.dhtDevice=None
         self.lammonMittaaja = threading.Thread(target=self.lueLampoanturi)
@@ -100,7 +100,7 @@ class Mittaaja(): # TÄMÄ LUOKKA HOITAA VARSINAISEN PINNIN LUKEMISEN JA KULUTUK
 
 class WsAsiakas(): #-----------------------------------------------------------------------------------------------------
     def __init__(self):
-        self.palvelin=config['yleiset']['palvelin']
+        self.palvelin=config.get('sm_host')
         self.t=threading.Thread(target=self.wsYhteys)
         self.t.start()
 
@@ -146,7 +146,7 @@ def lahetaWsServerille(data): #Tämä kutsutaan kun pulssien saatu
 
 def tallennaPulssi(): # Tallentaa pulssilukeman pysyväksi
     #lokita("tallenapulssi pysyvään tiedostoon. lukema on nyt:"+str(mittari.getPulssilukema()))
-    with open(config['yleiset']['pulssipysyva'], "w") as fpulssiTallenna: #tallennetaan pulssien määrä pysyväksi
+    with open(config.get('sm_pulssipysyva'), "w") as fpulssiTallenna: #tallennetaan pulssien määrä pysyväksi
         fpulssiTallenna.write(str(mittari.getPulssilukema()))
 
 if __name__ == "__main__": #----------------------------------------------------------------------------------------------------------
@@ -154,11 +154,11 @@ if __name__ == "__main__": #----------------------------------------------------
     viimtallennettuPulssiAika=time.time() #aika jolloin pulssi on viimeksi tallennettu tiedostoon
     mittari=Mittaaja(lahetaWsServerille)
     time.sleep(0.5)
-    if os.path.isfile(config['yleiset']['pulssipysyva']): #Jos on olemassa tallennettu pulssilukema
-        with open(config['yleiset']['pulssipysyva'], "r") as pulssiTiedosto: #Luetaan pulssilukema tiedostosta
+    if os.path.isfile(config.get('sm_pulssipysyva')): #Jos on olemassa tallennettu pulssilukema
+        with open(config.get('sm_pulssipysyva'), "r") as pulssiTiedosto: #Luetaan pulssilukema tiedostosta
             mittari.setPulssilukema(int(pulssiTiedosto.read()))
     while True:
-        if time.time() - viimtallennettuPulssiAika >= float(config['yleiset']['tallennapulssisek']):
+        if time.time() - viimtallennettuPulssiAika >= float(config.get('sm_tallennapulssisek')):
             tallennaPulssi()
             viimtallennettuPulssiAika=time.time()
         time.sleep(3)

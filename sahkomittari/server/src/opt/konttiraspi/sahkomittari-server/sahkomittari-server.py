@@ -7,7 +7,7 @@ from datetime import datetime
 import time, threading, logging, sys, os, json, logging, urllib.parse, sqlite3
 DEBUG=False
 
-kulutusTietokanta=os.getcwd()+"/opt/sahkomittari-server/data/kulutus.db"
+kulutusTietokanta=os.getcwd()+"/opt/konttiraspi/sahkomittari-server/data/kulutus.db"
 
 viimTallennusaika="" #Tähän kirjoitetaan milloin pysyvät tiedostot on viimeksi tallennettu HH
 kwhMuisti={} # {'192.168.4.222': '0.45250'}
@@ -20,7 +20,7 @@ def tallennaPysyvat(): # Tallennetaan kulutuslukemat pysyvään paikalliseen tie
     aika=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     ulkolampo=-127.0 #haetaan tää lopullisessa versiossa tässä kohtaa serverin mittarilta?
     ulkokosteus=-127.0
-    conn = sqlite3.connect("/opt/sahkomittari-server/data/kulutus.db")
+    conn = sqlite3.connect("/opt/konttiraspi/sahkomittari-server/data/kulutus.db")
     c = conn.cursor()
     for asiakasIP in kwhMuisti: #käydään kaikki asiakkaa läpi yksi kerrallaan #TARKISTA TÄÄ OSUUS, LASKEE VÄÄRIN?
         kys=c.execute('SELECT kwh FROM kulutus WHERE IP="'+asiakasIP+'" ORDER BY aikaleima DESC LIMIT 1') #lasketaan ensin tunnin aikana tapahtunut kulutus vertaamalla nykyistä viimeksi tietokantaan tallennettuun lukemaan
@@ -78,7 +78,7 @@ if __name__ == "__main__":    # PÄÄOHJELMA ALKAA
     selainWs=PalveluWs(8889, selainWscallback) #websocket-palvelin selaimille
     mittariWs=PalveluWs(8888, mittariWscallback) #websocket-palvelin mittari-raspeille
 
-    conn = sqlite3.connect("/opt/sahkomittari-server/data/kulutus.db")
+    conn = sqlite3.connect("/opt/konttiraspi/sahkomittari-server/data/kulutus.db")
     c = conn.cursor()
     c.execute('CREATE TABLE IF NOT EXISTS kulutus (aikaleima DATE, ip TEXT , kwh REAL, pulssit INTEGER, tuntikohtainen REAL, lampo REAL, kosteus REAL, ulkolampo REAL, ulkokosteus REAL)')
     conn.commit()

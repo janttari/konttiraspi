@@ -7,9 +7,15 @@ mesh_type=gateway #client|gateway|none
 mesh_ip=192.168.234.123 #Tämän laitteen mesh ip
 mesh_gateway=192.168.234.1 #Gatewayn ip kun tämä laite on client
 
-sahkomittari_type=client #server|client|none
-sahkomittari_host=192.168.234.1 #Otetaan yhteyttä tähän sähkömittari-palvelimeen kun tämä laite on client
-
+sm_type=client #server|client|none
+sm_host=palvelin=ws://192.168.4.222:8888/ #Otetaan yhteyttä tähän sähkömittari-palvelimeen kun tämä laite on client
+sm_serial=/dev/ttyUSB0 #sahkomittari client sarjaportti jossa arduino kiinni
+sm_imp=1000 #sahkomittari clien impulsseja per kwh
+sm_pulssipysyva=/opt/konttiraspi/sahkomittari-client/pulssi #Tähän tiedostoon tallennetaan pysyvä pulssilukema client
+sm_alive=30 #Lähetetään nn sekunnin välein alive-viesti, jos muuta lähetetävää ei ole client
+sm_tallennapulssisek=600 #Pulssilukema kirjoitetaan nn sekunnin välein. client
+sm_maxtiheys=3 #lähetetään enintään näin monen sekunnin välein lukemia palvelimelle client
+#sm_dhtpin=4 #Lämpömittari raspin tässä pinnissä client
 END
 
 }
