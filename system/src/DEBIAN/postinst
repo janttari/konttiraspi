@@ -1,0 +1,34 @@
+#!/bin/bash
+
+### kirjoitetaan konffitiedosto ####
+function konffi {
+sudo tee /boot/asetukset.txt >/dev/null << END
+mesh_type=gateway #client|gateway|none
+mesh_ip=192.168.234.123 #Tämän laitteen mesh ip
+mesh_gateway=192.168.234.1 #Gatewayn ip kun tämä laite on client
+
+sahkomittari_type=client #server|client|none
+sahkomittari_host=192.168.234.1 #Otetaan yhteyttä tähän sähkömittari-palvelimeen kun tämä laite on client
+
+END
+
+}
+### varmistetaan onko koffi jo olemassa ###
+if [ -f "/boot/asetukset.txt" ]; then
+    read -e -p "Asetustiedosto on olemassa. Korvataanko? (k/e): " -i "e" KORVAA
+    if [[ "$KORVAA" == "k" ]]; then
+        konffi
+    fi
+else 
+    echo Luodaan asetustiedosto
+    konffi
+fi
+
+### reboot? ###
+read -e -p "Uudelleenkäynnistys vaaditaan. Uudelleenkäynnistä nyt? (k/e): " -i "e" REBOOT
+if [[ "$REBOOT" == "k" ]]; then
+    sudo reboot
+fi
+
+
+

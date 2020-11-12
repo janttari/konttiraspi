@@ -1,0 +1,6 @@
+#!/bin/bash
+dpkg-deb --build sahkomittari/client/src konttiraspi-sahkomittari-client.deb
+dpkg-deb --build sahkomittari/server/src konttiraspi-sahkomittari-server.deb
+dpkg-deb --build mesh/client/src konttiraspi-mesh-client.deb
+dpkg-deb --build mesh/gateway/src konttiraspi-mesh-gateway.deb
+dpkg-deb --build system/src konttiraspi-system.deb

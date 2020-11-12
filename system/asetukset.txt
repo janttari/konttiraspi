@@ -1,0 +1,7 @@
+mesh_type=gateway #client|gateway|none
+mesh_ip=192.168.234.123 #Tämän laitteen mesh ip
+mesh_gateway=192.168.234.1 #Gatewayn ip (Ei tarvita jos tämä laite on gateway)
+
+sahkomittari_type=client #server|client
+sahkomittari_host=192.168.234.1 #Otetaan yhteyttä tähän sähkömittari-palvelimeen (Ei tarvita jos tämä laite on server)
+

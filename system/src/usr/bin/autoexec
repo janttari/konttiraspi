@@ -1,0 +1,32 @@
+#!/bin/bash
+whoami >>/tmp/autoexec.txt
+date >>/tmp/autoexec.txt
+
+### lataa asetukset muistiin ###
+. /boot/asetukset.txt
+
+
+### mesh client ###
+if [[ "$mesh_type" == "client" ]]; then
+    echo mesh  client
+fi
+
+### mesh gateway ###
+if [[ "$mesh_type" == "gateway" ]]; then
+    echo mesh  gateway
+fi
+
+### sähkömittari server ###
+if [[ "$sahkomittari_type" == "server" ]]; then
+    echo sähkömittari server
+fi
+
+### sähkömittari client ###
+if [[ "$sahkomittari_type" == "client" ]]; then
+    echo sähkömittari client otetaan yhteys kohteeseen $sahkomittari_host
+fi
+
+
+
+
+echo $mesh_ip
