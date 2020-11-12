@@ -1,5 +1,6 @@
 #!/bin/bash
 ./teedeb
-tree -C ~/konttiraspit | aha --black --title "konttiraspit"> tree.html
+tree -C ~/konttiraspit | aha --black --title "konttiraspit"> doc/tree.html
+wkhtmltoimage doc/tree.html doc/tree.png
 git add * && git commit -m "gup" && git push
 
