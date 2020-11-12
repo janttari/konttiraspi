@@ -1,9 +1,9 @@
-Package: konttiraspi-sahkomittari-client                                                             
+Package: konttiraspi-sahkomittari-server                                                            
 Version: 0.02                                                                                            
 Section: misc                                                                                            
 Priority: optional                                                                                       
 Architecture: all
-Depends: php7.3-fpm | php7.3 | fcgiwrap
+Depends: konttiraspi-system | php7.3-fpm | php7.3 | fcgiwrap
 Maintainer: Jani Janttari <janttari@yandex.ru>
 Description:
  -

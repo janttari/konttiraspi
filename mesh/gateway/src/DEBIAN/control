@@ -1,9 +1,9 @@
-Package: konttiraspi-sahkomittari-client                                                             
+Package: konttiraspi-mesh-gateway                                                             
 Version: 0.02                                                                                            
 Section: misc                                                                                            
 Priority: optional                                                                                       
 Architecture: all
-Depends:
+Depends: konttiraspi-system
 Maintainer: Jani Janttari <janttari@yandex.ru>
 Description:
  -
