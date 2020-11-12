@@ -12,12 +12,6 @@
 ├── <span style="font-weight:bold;color:#3333FF;">doc</span>
 │   ├── tree.html
 │   └── <span style="font-weight:bold;color:fuchsia;">tree.png</span>
-├── <span style="font-weight:bold;color:lime;">gup</span>
-├── <span style="font-weight:bold;color:red;">konttiraspi-mesh-client.deb</span>
-├── <span style="font-weight:bold;color:red;">konttiraspi-mesh-gateway.deb</span>
-├── <span style="font-weight:bold;color:red;">konttiraspi-sahkomittari-client.deb</span>
-├── <span style="font-weight:bold;color:red;">konttiraspi-sahkomittari-server.deb</span>
-├── <span style="font-weight:bold;color:red;">konttiraspi-system.deb</span>
 ├── <span style="font-weight:bold;color:#3333FF;">mesh</span>
 │   ├── <span style="font-weight:bold;color:#3333FF;">client</span>
 │   │   └── <span style="font-weight:bold;color:#3333FF;">src</span>
@@ -44,61 +38,60 @@
 │   │               └── <span style="font-weight:bold;color:#3333FF;">mesh-gateway</span>
 │   │                   └── <span style="font-weight:bold;color:lime;">meshgateway</span>
 │   └── README.md
-├── README.md
 ├── <span style="font-weight:bold;color:#3333FF;">sahkomittari</span>
 │   ├── <span style="font-weight:bold;color:#3333FF;">client</span>
 │   │   ├── <span style="font-weight:bold;color:#3333FF;">arduino-mittari</span>
 │   │   │   ├── arduino-mittari.ino
 │   │   │   ├── sahkomittari_nano_arduino_bb.pdf
 │   │   │   └── sahkomittari_nano_arduino.fzz
-│   │   ├── <span style="font-weight:bold;color:fuchsia;">mittarin-kytkentä.png</span>
-│   │   └── <span style="font-weight:bold;color:#3333FF;">src</span>
-│   │       ├── <span style="font-weight:bold;color:#3333FF;">DEBIAN</span>
-│   │       │   ├── control
-│   │       │   ├── <span style="font-weight:bold;color:lime;">postinst</span>
-│   │       │   └── <span style="font-weight:bold;color:lime;">preinst</span>
-│   │       └── <span style="font-weight:bold;color:#3333FF;">opt</span>
-│   │           └── <span style="font-weight:bold;color:#3333FF;">konttiraspi</span>
-│   │               └── <span style="font-weight:bold;color:#3333FF;">sahkomittari-client</span>
-│   │                   └── <span style="font-weight:bold;color:lime;">raspisahkomittari.py</span>
-│   ├── README.md
-│   └── <span style="font-weight:bold;color:#3333FF;">server</span>
-│       ├── <span style="font-weight:bold;color:lime;">asenna</span>
-│       ├── _note.txt
-│       ├── <span style="font-weight:bold;color:lime;">paivita</span>
-│       ├── <span style="font-weight:bold;color:#3333FF;">src</span>
-│       │   ├── <span style="font-weight:bold;color:#3333FF;">DEBIAN</span>
-│       │   │   ├── control
-│       │   │   ├── <span style="font-weight:bold;color:lime;">postinst</span>
-│       │   │   └── <span style="font-weight:bold;color:lime;">preinst</span>
-│       │   ├── <span style="font-weight:bold;color:#3333FF;">opt</span>
-│       │   │   └── <span style="font-weight:bold;color:#3333FF;">konttiraspi</span>
-│       │   │       └── <span style="font-weight:bold;color:#3333FF;">sahkomittari-server</span>
-│       │   │           ├── <span style="font-weight:bold;color:#3333FF;">data</span>
-│       │   │           ├── palveluws.py
-│       │   │           ├── <span style="font-weight:bold;color:#3333FF;">__pycache__</span>
-│       │   │           │   └── palveluws.cpython-37.pyc
-│       │   │           ├── <span style="font-weight:bold;color:lime;">sahkomittari-server.py</span>
-│       │   │           └── <span style="font-weight:bold;color:#3333FF;">websocket_server</span>
-│       │   │               ├── __init__.py
-│       │   │               ├── <span style="font-weight:bold;color:#3333FF;">__pycache__</span>
-│       │   │               │   ├── __init__.cpython-37.pyc
-│       │   │               │   └── websocket_server.cpython-37.pyc
-│       │   │               └── websocket_server.py
-│       │   └── <span style="font-weight:bold;color:#3333FF;">www</span>
-│       │       ├── <span style="font-weight:bold;color:#3333FF;">asiakashallinta</span>
-│       │       │   ├── <span style="font-weight:bold;color:lime;">Db.php</span>
-│       │       │   ├── <span style="font-weight:bold;color:lime;">index.php</span>
-│       │       │   └── <span style="font-weight:bold;color:lime;">varmuuskopioi.php</span>
-│       │       ├── historia.php
-│       │       ├── index.php
-│       │       ├── <span style="font-weight:bold;color:#3333FF;">js</span>
-│       │       │   └── jquery-3.5.1.min.js
-│       │       ├── <span style="font-weight:bold;color:#3333FF;">kuukausiraportit</span>
-│       │       │   ├── index.php
-│       │       │   └── raportti.php
-│       │       └── rele.php
-│       └── <span style="font-weight:bold;color:lime;">temp-muunna-tietokanta.py</span>
+│   │   ├── <span style="font-weight:bold;color:#3333FF;">src</span>
+│   │   │   ├── <span style="font-weight:bold;color:#3333FF;">DEBIAN</span>
+│   │   │   │   ├── control
+│   │   │   │   ├── <span style="font-weight:bold;color:lime;">postinst</span>
+│   │   │   │   └── <span style="font-weight:bold;color:lime;">preinst</span>
+│   │   │   └── <span style="font-weight:bold;color:#3333FF;">opt</span>
+│   │   │       └── <span style="font-weight:bold;color:#3333FF;">konttiraspi</span>
+│   │   │           └── <span style="font-weight:bold;color:#3333FF;">sahkomittari-client</span>
+│   │   │               └── <span style="font-weight:bold;color:lime;">raspisahkomittari.py</span>
+│   │   └── <span style="font-weight:bold;color:fuchsia;">mittarin-kytkentä.png</span>
+│   ├── <span style="font-weight:bold;color:#3333FF;">server</span>
+│   │   ├── <span style="font-weight:bold;color:#3333FF;">src</span>
+│   │   │   ├── <span style="font-weight:bold;color:#3333FF;">DEBIAN</span>
+│   │   │   │   ├── control
+│   │   │   │   ├── <span style="font-weight:bold;color:lime;">postinst</span>
+│   │   │   │   └── <span style="font-weight:bold;color:lime;">preinst</span>
+│   │   │   ├── <span style="font-weight:bold;color:#3333FF;">opt</span>
+│   │   │   │   └── <span style="font-weight:bold;color:#3333FF;">konttiraspi</span>
+│   │   │   │       └── <span style="font-weight:bold;color:#3333FF;">sahkomittari-server</span>
+│   │   │   │           ├── <span style="font-weight:bold;color:#3333FF;">data</span>
+│   │   │   │           ├── <span style="font-weight:bold;color:#3333FF;">__pycache__</span>
+│   │   │   │           │   └── palveluws.cpython-37.pyc
+│   │   │   │           ├── <span style="font-weight:bold;color:#3333FF;">websocket_server</span>
+│   │   │   │           │   ├── <span style="font-weight:bold;color:#3333FF;">__pycache__</span>
+│   │   │   │           │   │   ├── __init__.cpython-37.pyc
+│   │   │   │           │   │   └── websocket_server.cpython-37.pyc
+│   │   │   │           │   ├── __init__.py
+│   │   │   │           │   └── websocket_server.py
+│   │   │   │           ├── palveluws.py
+│   │   │   │           └── <span style="font-weight:bold;color:lime;">sahkomittari-server.py</span>
+│   │   │   └── <span style="font-weight:bold;color:#3333FF;">www</span>
+│   │   │       ├── <span style="font-weight:bold;color:#3333FF;">asiakashallinta</span>
+│   │   │       │   ├── <span style="font-weight:bold;color:lime;">Db.php</span>
+│   │   │       │   ├── <span style="font-weight:bold;color:lime;">index.php</span>
+│   │   │       │   └── <span style="font-weight:bold;color:lime;">varmuuskopioi.php</span>
+│   │   │       ├── <span style="font-weight:bold;color:#3333FF;">js</span>
+│   │   │       │   └── jquery-3.5.1.min.js
+│   │   │       ├── <span style="font-weight:bold;color:#3333FF;">kuukausiraportit</span>
+│   │   │       │   ├── index.php
+│   │   │       │   └── raportti.php
+│   │   │       ├── historia.php
+│   │   │       ├── index.php
+│   │   │       └── rele.php
+│   │   ├── <span style="font-weight:bold;color:lime;">asenna</span>
+│   │   ├── _note.txt
+│   │   ├── <span style="font-weight:bold;color:lime;">paivita</span>
+│   │   └── <span style="font-weight:bold;color:lime;">temp-muunna-tietokanta.py</span>
+│   └── README.md
 ├── <span style="font-weight:bold;color:#3333FF;">system</span>
 │   ├── <span style="font-weight:bold;color:#3333FF;">src</span>
 │   │   ├── <span style="font-weight:bold;color:#3333FF;">DEBIAN</span>
@@ -111,6 +104,13 @@
 │   │       └── <span style="font-weight:bold;color:#3333FF;">bin</span>
 │   │           └── <span style="font-weight:bold;color:lime;">autoexec</span>
 │   └── <span style="font-weight:bold;color:lime;">wifiteho</span>
+├── <span style="font-weight:bold;color:lime;">gup</span>
+├── <span style="font-weight:bold;color:red;">konttiraspi-mesh-client.deb</span>
+├── <span style="font-weight:bold;color:red;">konttiraspi-mesh-gateway.deb</span>
+├── <span style="font-weight:bold;color:red;">konttiraspi-sahkomittari-client.deb</span>
+├── <span style="font-weight:bold;color:red;">konttiraspi-sahkomittari-server.deb</span>
+├── <span style="font-weight:bold;color:red;">konttiraspi-system.deb</span>
+├── README.md
 └── <span style="font-weight:bold;color:lime;">teedeb</span>
 
 43 directories, 60 files
