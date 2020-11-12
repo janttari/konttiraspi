@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# OHITTAA WIFI TEHORAJAT. LUO MAAN XX JOSSA SALLITTU ISOMMAT TEHOT
+#
+
+# https://gist.github.com/kylemcdonald/b4ef99605fdf32d872dbc72d966421a0
+# Based on http://networkgeekstuff.com/networking/how-to-create-custom-linux-wi-fi-regulatory-database-to-unlock-30db1000mw/
+
+sudo apt-get update
+
+mkdir ~/regdb
+
+cd ~/regdb
+sudo apt-get -y install python-m2crypto
+curl -O http://archive.ubuntu.com/ubuntu/pool/main/w/wireless-regdb/wireless-regdb_2013.02.13.orig.tar.xz
+tar xf wireless-regdb_2013.02.13.orig.tar.xz && rm wireless-regdb_2013.02.13.orig.tar.xz
+cd wireless-regdb-2013.02.13
+printf "country XX:\n(2402 - 2494 @ 40), (N/A, 33)\n(4910 - 5235 @ 40), (N/A, 33)\n" >> db.txt
+make && sudo make install
+
+cd ~/regdb
+sudo apt-get -y install libnl-dev libgcrypt-dev
+curl -O http://archive.ubuntu.com/ubuntu/pool/main/c/crda/crda_1.1.2.orig.tar.bz2
+bunzip2 crda_1.1.2.orig.tar.bz2 && tar xf crda_1.1.2.orig.tar && rm crda_1.1.2.orig.tar
+cd crda-1.1.2
+cp -v ../wireless-regdb-2013.02.13/*.key.pub.pem pubkeys
+make && sudo make install
+
+sudo reboot
