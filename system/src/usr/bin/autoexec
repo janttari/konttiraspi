@@ -8,25 +8,25 @@ date >>/tmp/autoexec.txt
 
 ### mesh client ###
 if [[ "$mesh_type" == "client" ]]; then
-    echo mesh  client
+    echo mesh  client  >>/tmp/autoexec.txt
 fi
 
 ### mesh gateway ###
 if [[ "$mesh_type" == "gateway" ]]; then
-    echo mesh  gateway
+    echo mesh  gateway  >>/tmp/autoexec.txt
 fi
 
 ### sähkömittari server ###
 if [[ "$sahkomittari_type" == "server" ]]; then
-    echo sähkömittari server
+    echo sähkömittari server  >>/tmp/autoexec.txt
 fi
 
 ### sähkömittari client ###
 if [[ "$sahkomittari_type" == "client" ]]; then
-    echo sähkömittari client otetaan yhteys kohteeseen $sahkomittari_host
+    echo sähkömittari client otetaan yhteys kohteeseen $sahkomittari_host  >>/tmp/autoexec.txt
 fi
 
 
 
 
-echo $mesh_ip
+echo $mesh_ip  >>/tmp/autoexec.txt
