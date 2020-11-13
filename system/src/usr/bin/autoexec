@@ -30,7 +30,25 @@ if [[ "$sahkomittari_type" == "client" ]]; then
     /opt/konttiraspi/sahkomittari-client/raspisahkomittari.py &
 fi
 
-
-
-
 echo mesh-ip $mesh_ip  >>/tmp/autoexec.txt
+
+while true; do #Tarkistetaan päivitykset palvelimelta
+    hh=$(date +%H)
+    if [[ $hh != $viim ]]; then
+        if [[ ! -z "$system_updateserver" ]];then
+            echo tark paiv $system_updateserver
+            paiv=$(wget "$system_updateserver/paivitys.txt" -O - 2>/dev/null)
+            nykyinen=$(cat /opt/konttiraspi/versio 2>/dev/null)
+            if [[ $paiv -gt $nykyinen ]]; then
+                echo on uudempi LADATAAN! >>/tmp/autoexec.txt
+                wget "$system_updateserver/paivitys.bash" -O paivitys.bash 2>/dev/null
+                bash paivitys.bash >>/tmp/autoexec.txt
+                rm paivitys.bash
+                echo $paiv > /opt/konttiraspi/versio
+            fi
+        fi
+        viim=$hh
+    fi
+    sleep 10
+done
+

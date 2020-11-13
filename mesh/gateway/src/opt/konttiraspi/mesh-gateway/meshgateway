@@ -1,23 +1,11 @@
 #!/bin/bash
-kanava=11 #palvelu tulee tälle wifi-kanavalle #HUOM https://github.com/aircrack-ng/rtl8812au/issues/715 VAIN 36 TOIMII 5GHz alueella!!
-ip=192.168.202.1
-broadcast=192.168.202.255
-# https://github.com/nicholasvmoore/raspberrypi-mesh
-#---------------------------------------------------------------------------------------
-taajuudet=(2412 2417 2422 2427 2432 2437 2442 2447 2452 2457 2462 2467 2472 2484)
-laite=$(sudo lshw -class network|grep rt2800usb -B3|head -n 1|cut -d ':' -f 2|cut -c 2-)
-echo $laite
-
-if [[ ! "$laite" ]]; then
-    echo wifi-sovitinta ei löytynyt!
-fi
+. /boot/asetukset.txt
 
 if [[ $1 == "up" ]]; then
     if (lsmod|grep batman_adv) >/dev/null;then
         echo "On jo käynnissä!"
         exit 1
     fi
-    mhz=${taajuudet[$kanava-1]}
     #sudo iw reg get
     #sudo iw reg set US
     # sudo iw wlan1 set txpower fixed 3000
@@ -27,23 +15,23 @@ if [[ $1 == "up" ]]; then
     sudo modprobe batman-adv 2>/dev/null
     sudo killall wpa_supplicant 2>/dev/null
     sudo sysctl -w net.ipv4.ip_forward=1 >/dev/null
-    sudo ip link set $laite down
-    sudo iw reg set XX
-    sudo  iwconfig wlan1 txpower 30
+    sudo ip link set $mesh_device down
+    sudo iw reg set $mesh_country
+    sudo  iwconfig wlan1 txpower $mesh_txpower
     #sudo iw $laite set txpower fixed 3000
-    sudo ip link set mtu 1532 dev $laite
+    sudo ip link set mtu $mesh_mtu dev $mesh_device
     sleep 1
-    sudo iw $laite set type ibss
-    sudo ip link set $laite up
+    sudo iw $mesh_device set type ibss
+    sudo ip link set $mesh_device up
     sleep 2
-    sudo iw $laite ibss join mesh $mhz NOHT #[NOHT|HT20|HT40+|HT40-|5MHz|10MHz|80MHz]
+    sudo iw $mesh_device ibss join mesh $mesh_mhz NOHT #[NOHT|HT20|HT40+|HT40-|5MHz|10MHz|80MHz]
     sudo batctl ra BATMAN_V
     #sudo batctl ra BATMAN_IV
-    sudo batctl if add $laite
+    sudo batctl if add $mesh_device
     sudo ip link set bat0 up
     sudo batctl gw_mode server
     sudo ip -6 addr add fe80::ba27:ebff:fe77:3d38/64 dev bat0 #wwww https://github.com/suiluj/pi-adhoc-mqtt-cluster/wiki/Batman-Adv-and-Batctl#option-3-batman-meshnode-with-internet-gateway
-    sudo ip addr add $ip/24 broadcast $broadcast dev bat0
+    sudo ip addr add $mesh_ip/24 broadcast $mesh_broadcast dev bat0
     #sleep 1
     sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
     sudo iptables -A FORWARD -i eth0 -o bat0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
@@ -59,11 +47,11 @@ elif [[ $1 == "down" ]];then
         echo "Ei ole käynnissä!"
         exit 1
     fi
-    sudo ip link set $laite down
-    sudo ip addr flush dev $laite
-    sudo iw $laite set type managed
+    sudo ip link set $mesh_device down
+    sudo ip addr flush dev $mesh_device
+    sudo iw $mesh_device set type managed
     sudo rmmod batman-adv
-    sudo ip link set mtu 1500 dev $laite
+    sudo ip link set mtu $mesh_mtu dev $mesh_device
     #sudo ip link del mesh-bridge
     sudo iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
     sudo iptables -D FORWARD -i eth0 -o bat0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
