@@ -62,11 +62,11 @@ class FlaskPalvelu:
         self.clientsMeshraspi=[]
         self.clientsSelain=[]
         self.app = Flask(__name__)
-        #self.app.logger.disabled = True #hide flask messages
-        #log = logging.getLogger('werkzeug') #hide flask messages
-        #log.disabled = True #hide flask messages
-        #cli = sys.modules['flask.cli'] #hide flask messages
-        #cli.show_server_banner = lambda *x: None #hide flask messages
+        self.app.logger.disabled = True #hide flask messages
+        log = logging.getLogger('werkzeug') #hide flask messages
+        log.disabled = True #hide flask messages
+        cli = sys.modules['flask.cli'] #hide flask messages
+        cli.show_server_banner = lambda *x: None #hide flask messages
         self.app.config['SECRET_KEY'] = 'secret!'
         self.app.config['DEBUG'] = False
         self.socketio = SocketIO(self.app, async_mode='threading', logger=False, engineio_logger=False)
