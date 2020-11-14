@@ -121,16 +121,15 @@ END
 
 }
 ### varmistetaan onko koffi jo olemassa ###
-if [ -f "/boot/asetukset.txt" ]; then
-    dialog --defaultno --yesno "Asetustiedosto löytyy jo. Korvataanko se?" 22 76
+if [ ! -f "/boot/asetukset.txt" ]; then
+    dialog --defaultno --yesno "Asetustiedostoa ei löydy. Kirjoitetaanko mallitiedosto?" 22 76
     okcancel=$?
     clear
     if [[ "$okcancel" == "0" ]]; then
-        echo kirjoita konffi
         konffi
+        dialog --msgbox "Asetustiedosto /boot/asetukset.txt on luotu. Muista muokata se!" 22 76 && clear
     fi
-else
-    echo Luodaan asetustiedosto
-    konffi
 fi
+
+dialog --msgbox "Asennus on valmis ja reboot on suositeltavaa tehdä nyt!" 22 76 && clear
 
