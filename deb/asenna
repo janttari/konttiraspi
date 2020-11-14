@@ -84,3 +84,53 @@ else
 fi
 
 
+#-------------------------------------------------------------------------
+### kirjoitetaan konffitiedosto ####
+function konffi {
+sudo tee /boot/asetukset.txt >/dev/null << END
+## system
+#system_updateserver=http://0.0.0.0/update.txt #Automaattiset päivitykset !HUOM EI TUOTANTOKÄYTTÖÖN!
+
+## MESH-asetukset *Client *Gateway
+mesh_type=gateway #client|gateway|none *CG
+mesh_ip=192.168.234.123 #Tämän laitteen mesh ip *CG
+mesh_name=fo-t-raspi333 #Tämän laitteen nimi mesh-verkossa *CG
+mesh_gateway=192.168.234.1 #Gatewayn ip *C
+mesh_broadcast=192.168.243.255 # *CG
+mesh_mhz=2462 #Taajuus jolle mesh-verkko luodaan *CG
+mesh_netname=mesh #Mesh-verkon nimi *CG
+mesh_country=XX #Mesh-verkon maa. käytä XX jo wifiteholla tehty tietokanta 2 watille *CG
+mesh_txpower=30 #Lähetysteho *CG
+mesh_device=wlan1 #Wifi-laite, jota mesh käyttää *CG
+mesh_mtu=1500 # *CGmesg_mtu=1500
+## batnaapuri-asetukset *Client *Server
+batnaapuri_server=http://192.168.234.1:8000 #batnaapuri-palvelin *C
+batnaapuri_portti=8000 #palvellaan batnaapuri-serveriä tässä portissa *S
+
+## Sähkömittari-asetukset *Client *Server
+sm_type=client #server|client *SC
+sm_host=palvelin=ws://192.168.4.222:8888/ #Otetaan yhteyttä tähän sähkömittari-palvelimeen kun tämä laite on *C
+sm_serial=/dev/ttyUSB0 #sarjaportti jossa arduino kiinni *C
+sm_imp=1000 #sahkomittari antaa impulsseja per kwh *C
+sm_pulssipysyva=/opt/konttiraspi/sahkomittari-client/pulssi #Tähän tiedostoon tallennetaan pysyvä pulssilukema *C
+sm_alive=30 #Lähetetään nn sekunnin välein alive-viesti, jos muuta lähetetävää ei ole *C
+sm_tallennapulssisek=600 #Pulssilukema kirjoitetaan nn sekunnin välein. *C
+sm_maxtiheys=3 #lähetetään enintään näin monen sekunnin välein lukemia palvelimelle *C
+#sm_dhtpin=4 #Lämpömittari raspin tässä pinnissä *C
+END
+
+}
+### varmistetaan onko koffi jo olemassa ###
+if [ -f "/boot/asetukset.txt" ]; then
+    dialog --defaultno --yesno "Asetustiedosto löytyy jo. Korvataanko se?" 22 76
+    okcancel=$?
+    clear
+    if [[ "$okcancel" == "0" ]]; then
+        echo kirjoita konffi
+        konffi
+    fi
+else
+    echo Luodaan asetustiedosto
+    konffi
+fi
+
