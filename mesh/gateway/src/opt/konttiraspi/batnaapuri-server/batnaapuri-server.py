@@ -48,8 +48,8 @@ def vertaaNaapuriMuutoksia(): #onko naapuridatassa tapahtunut muutoksia?
 
 class FlaskPalvelu:
     def __init__(self):
-        self.clientsMeshraspi=[]
-        self.clientsSelain=[]
+        #self.clientsMeshraspi=[]
+        #self.clientsSelain=[]
         self.app = Flask(__name__)
         self.app.logger.disabled = True #hide flask messages
         log = logging.getLogger('werkzeug') #hide flask messages
@@ -68,15 +68,18 @@ class FlaskPalvelu:
 
         @self.socketio.on('connect', namespace='/selain')
         def selain_connect():
-            self.clientsSelain.append(request.sid)
+            pass
+            #self.clientsSelain.append(request.sid)
 
         @self.socketio.on('connect', namespace='/meshraspi')
         def meshraspi_connect():
-            self.clientsMeshraspi.append(request.sid)
+            pass
+            #self.clientsMeshraspi.append(request.sid)
 
         @self.socketio.on('disconnect', namespace='/meshraspi')
         def test_disconnect():
-            print('Client disconnected')
+            pass
+            #print('Client disconnected')
 
         @self.socketio.on('naapuri_message', namespace='/meshraspi') #client lähettää tietoa naapureistaan
         def __receiv_message(data):
@@ -119,10 +122,11 @@ def tarkistaKadonneet(): # käydään läpi laitteiden viimeiset havaintoajat
     for laite in list(MNT):
         nahtyViimeksi=time.time()-havaintoaika[laite]
         if nahtyViimeksi >=10:
-            print("kadonnut", laite)
+            #print("kadonnut", laite)
             del meshnaapuridata[laite]
             del MNT[laite]
-        print("MNT: ",laite, havaintoaika[laite])
+            luoVisuaali()
+        #print("MNT: ",laite, havaintoaika[laite])
 
 if __name__ == '__main__':
     f=FlaskPalvelu()
