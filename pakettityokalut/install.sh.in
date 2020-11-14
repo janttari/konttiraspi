@@ -18,7 +18,7 @@ function untar_payload()
 }
 
 untar_payload
-cd /tmp/konttiraspi/deb
+cd $hakemisto/deb
 chmod a+x asenna
 ./asenna
 exit 0
