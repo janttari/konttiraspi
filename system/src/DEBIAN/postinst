@@ -46,11 +46,6 @@ else
     konffi
 fi
 
-### reboot? ###
-read -e -p "Uudelleenkäynnistys vaaditaan. Uudelleenkäynnistä nyt? (k/e): " -i "e" REBOOT
-if [[ "$REBOOT" == "k" ]]; then
-    sudo reboot
-fi
 
 
 
