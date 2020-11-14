@@ -1,0 +1,25 @@
+#!/bin/bash
+
+uuencode=1
+binary=0
+hakemisto="/tmp/konttiraspi"
+function untar_payload()
+{
+        rm -rf $hakemisto
+        mkdir -p $hakemisto
+        match=$(grep --text --line-number '^PAYLOAD:$' $0 | cut -d ':' -f 1)
+        payload_start=$((match + 1))
+        if [[ $binary -ne 0 ]]; then
+                tail -n +$payload_start $0 | tar -xf - -C $hakemisto
+        fi
+        if [[ $uuencode -ne 0 ]]; then
+                tail -n +$payload_start $0 | uudecode | tar -xf - -C $hakemisto
+        fi
+}
+
+untar_payload
+cd /tmp/konttiraspi/deb
+chmod a+x asenna
+./asenna
+exit 0
+

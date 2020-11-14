@@ -1,0 +1,13 @@
+#!/bin/bash
+dpkg-deb --build sahkomittari/client/src deb/konttiraspi-sahkomittari-client.deb
+dpkg-deb --build sahkomittari/server/src deb/konttiraspi-sahkomittari-server.deb
+dpkg-deb --build mesh/client/src deb/konttiraspi-mesh-client.deb
+dpkg-deb --build mesh/gateway/src deb/konttiraspi-mesh-gateway.deb
+dpkg-deb --build system/src deb/konttiraspi-system.deb
+cd pakettityokalut
+tar -cvf tiedostot.tar ../deb/*
+./addpayload tiedostot.tar
+rm tiedostot.tar
+chmod a+x install.sh
+mv install.sh ../asenna_konttiraspi
+cd ..

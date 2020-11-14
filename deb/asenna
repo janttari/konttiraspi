@@ -1,0 +1,86 @@
+#!/bin/bash
+##tarkastetaan jo asennetut ominaisuudet:
+k1=$(sudo dpkg-query -l |grep konttiraspi-mesh-client)
+if [[ ${#k1} -gt 0 ]];then k1="on"; else k1="off"; fi
+k2=$(sudo dpkg-query -l |grep konttiraspi-mesh-gateway)
+if [[ ${#k2} -gt 0 ]];then k2="on"; else k2="off"; fi
+k3=$(sudo dpkg-query -l |grep konttiraspi-sahkomittari-client)
+if [[ ${#k3} -gt 0 ]];then k3="on"; else k3="off"; fi
+k4=$(sudo dpkg-query -l |grep konttiraspi-sahkomittari-server)
+if [[ ${#k4} -gt 0 ]];then k4="on"; else k4="off"; fi
+
+
+cmd=(dialog --separate-output --checklist "valitse konttiraspi-system lisäksi asennettavat palvelut:" 22 76 16)
+options=(1 "konttiraspi-mesh-client" $k1
+         2 "konttiraspi-mesh-gateway" $k2
+         3 "konttiraspi-sahkomittari-client" $k3
+         4 "konttiraspi-sahkomittari-server" $k4)
+choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+okcancel=$?
+clear
+if [[ $okcancel != 0 ]]; then
+    echo Peruuta
+    exit
+fi
+for choice in $choices
+do
+    case $choice in
+        1)
+            a1=1
+            ;;
+        2)
+            a2=1
+            ;;
+        3)
+            a3=1
+            ;;
+        4)
+            a4=1
+            ;;
+    esac
+done
+echo asennetaan konttiraspi-system
+sudo dpkg -i konttiraspi-system.deb
+
+if [[ $a1 == 1 ]]; then
+    echo asennetaan konttiraspi-mesh-client
+    sudo dpkg -i konttiraspi-mesh-client.deb
+else
+    if [[ "$k1" == "on" ]]; then
+        echo poistetaan konttiraspi-mesh-client
+        sudo dpkg -r konttiraspi-mesh-client
+    fi
+fi
+
+if [[ $a2 == 1 ]]; then
+    echo asennetaan konttiraspi-mesh-gateway
+    sudo dpkg -i konttiraspi-mesh-gateway.deb
+else
+    if [[ "$k2" == "on" ]]; then
+        echo poistetaan konttiraspi-mesh-gateway
+        sudo dpkg -r konttiraspi-mesh-gateway
+    fi
+fi
+
+
+if [[ $a3 == 1 ]]; then
+    echo asennetaan konttiraspi-sahkomittari-client
+    sudo dpkg -i konttiraspi-sahkomittari-client.deb
+else
+    if [[ "$k3" == "on" ]]; then
+        echo poistetaan konttiraspi-sahkomittari-client
+        sudo dpkg -r konttiraspi-sahkomittari-client
+    fi
+fi
+
+if [[ $a4 == 1 ]]; then
+    echo asennetaan konttiraspi-sahkomittari-server
+    sudo dpkg -i konttiraspi-sahkomittari-server.deb
+else
+    if [[ "$k4" == "on" ]]; then
+        echo poistetaan konttiraspi-sahkomittari-server
+        sudo dpkg -r konttiraspi-sahkomittari-server
+    fi
+fi
+
+
