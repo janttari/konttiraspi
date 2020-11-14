@@ -10,51 +10,40 @@ config=ConfigObj('/boot/asetukset.txt')
 
 meshnaapuridata={} #tässä on clientien ilmoittamien naapurihavaintojen kokonaisuus
 viimmeshnaapuridata={} #tässä on clientien ilmoittamien naapurihavaintojen kokonaisuus viimeinnen tunnettu tila vertailua varten
+MNT={} #Mac --> Nimi
+havaintoaika={} #MAC aikaleima Laitenähty viimeksi
 
 def luoVisuaali():
     G = nx.Graph()
     for isan in meshnaapuridata: #käydään isäntien naapurit läpi
-        print("isanta:",isan)
         for naap in meshnaapuridata[isan]["naapurit"]:
             naapuri=naap["laite"]
             teho=naap["teho"]
-            print(naapuri, teho)
             G.add_edge(isan[-5:], naapuri[-5:], valimatka=int(40-float(teho)))
     pos = nx.spring_layout(G, seed=0)
-    plt.figure(figsize =(9, 9))
+    plt.figure(figsize=(9, 9))
     nx.draw(G, pos,with_labels = True, node_color ='blue', node_size=3000, font_size=8, font_color="yellow")
     edge_labels = nx.get_edge_attributes(G,'valimatka')
     nx.draw_networkx_edge_labels(G, pos, edge_labels = edge_labels)
-    ##print(nx.shortest_path(G, ’A’, ’K’))
-    ##length = nx.shortest_path_length(G, source=’A’, target=’K’, weight=’valimatka’)
-    ##print("VM",length)
     plt.savefig('static/kartta.png')
+    #plt.clf()
+    #plt.cla()
+    plt.close()
     f.paivitaKuva()
 
 def vertaaNaapuriMuutoksia(): #onko naapuridatassa tapahtunut muutoksia?
     global viimmeshnaapuridata
     muuttunut=False
-    #print("----------------------------")
-    #print(meshnaapuridata)
     for isanta in meshnaapuridata:
         for naapurit in meshnaapuridata[isanta]["naapurit"]:
             if isanta in viimmeshnaapuridata:
                 vanhat=viimmeshnaapuridata[isanta]["naapurit"]
-
-                #print("VABNHAT",vanhat,type(vanhat),len(vanhat))
-                #print("UUUUUUU",naapurit,type(naapurit),len(naapurit))
                 if meshnaapuridata[isanta]["naapurit"] != vanhat:
-                    #print("MUUUUUUUUUUUUUUT")
                     muuttunut=True
             else:
-                print("ei ole")
                 muuttunut=True
-    #print("AA",meshnaapuridata)
-    #print("BB,",viimmeshnaapuridata)
     if muuttunut:
-        print("MUUTTUNUT")
         viimmeshnaapuridata=meshnaapuridata.copy()
-        print(meshnaapuridata)
         luoVisuaali()
 
 class FlaskPalvelu:
@@ -80,12 +69,10 @@ class FlaskPalvelu:
         @self.socketio.on('connect', namespace='/selain')
         def selain_connect():
             self.clientsSelain.append(request.sid)
-            print("selain")
 
         @self.socketio.on('connect', namespace='/meshraspi')
         def meshraspi_connect():
             self.clientsMeshraspi.append(request.sid)
-            print("CON")
 
         @self.socketio.on('disconnect', namespace='/meshraspi')
         def test_disconnect():
@@ -94,9 +81,11 @@ class FlaskPalvelu:
         @self.socketio.on('naapuri_message', namespace='/meshraspi') #client lähettää tietoa naapureistaan
         def __receiv_message(data):
             jdata=json.loads(data)
-            isanta=jdata["laite"]
+            isantaNimi=jdata["laite"]
+            isantaMAC=jdata["mac"]
+            MNT[isantaMAC]=isantaNimi #päivitetään nimet
+            havaintoaika[isantaMAC]=time.time()
             naap=[]
-            print("VVV isanta:",isanta)
             for j in jdata["data"]:
                 nmac=j["mac"]
                 nteho=j["teho"]
@@ -104,7 +93,7 @@ class FlaskPalvelu:
                 kohde={"laite": nmac, "teho": nteho, "viive": nviive}
                 naap.append(kohde)
             aika=time.time()
-            meshnaapuridata[isanta]={"naapurit": naap, "havaintoaika": aika}
+            meshnaapuridata[isantaMAC]={"naapurit": naap, "havaintoaika": aika}
             vertaaNaapuriMuutoksia()
 
         @self.socketio.on('selainmsg', namespace='/selain') #selaimelta tulevia komentoja
@@ -120,17 +109,27 @@ class FlaskPalvelu:
         self.socketio.emit('naapuridata', {'data': number}, namespace='/selain') #kaikille namespacessa
 
     def paivitaKuva(self):
-        print("päivitä selaimen kuva")
+        #print("päivitä selaimen kuva")
         self.socketio.emit('paivitakuva', {'data': 0}, namespace='/selain') #kaikille namespacessa
 
     def palv(self):
         self.socketio.run(self.app, host='0.0.0.0', port=int(config.get("batnaapuri_portti")))
+
+def tarkistaKadonneet(): # käydään läpi laitteiden viimeiset havaintoajat
+    for laite in list(MNT):
+        nahtyViimeksi=time.time()-havaintoaika[laite]
+        if nahtyViimeksi >=10:
+            print("kadonnut", laite)
+            del meshnaapuridata[laite]
+            del MNT[laite]
+        print("MNT: ",laite, havaintoaika[laite])
 
 if __name__ == '__main__':
     f=FlaskPalvelu()
     num=0
     while True:
         num+=1
-        #print(".",meshnaapuridata)
-        f.lahetaSelain("piip"+str(num))
+        if num % 10 == 0:
+            tarkistaKadonneet()
+        #f.lahetaSelain("piip"+str(num))
         time.sleep(1)
