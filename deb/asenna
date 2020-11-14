@@ -1,4 +1,9 @@
 #!/bin/bash
+
+##sharutils asennettu?
+shar=$(sudo dpkg-query -l |grep sharutils)
+if [[ ${#shar} == 0 ]];then echo Asennetaan sharutils && sudo apt update && sudo apt install -y sharutils; fi
+
 ##tarkastetaan jo asennetut ominaisuudet:
 k1=$(sudo dpkg-query -l |grep konttiraspi-mesh-client)
 if [[ ${#k1} -gt 0 ]];then k1="on"; else k1="off"; fi
