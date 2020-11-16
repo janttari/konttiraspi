@@ -48,7 +48,7 @@ class WsAsiakas:
 
     def laheta(self, sanoma):
         jsanoma=json.loads(sanoma)
-        print("Lähettää", jsanoma, flush=True)
+        #print("Lähettää", jsanoma, flush=True)
         self.sio.emit('naapuri_message', sanoma, namespace='/meshraspi')
 
 if __name__ == "__main__":
@@ -56,7 +56,7 @@ if __name__ == "__main__":
     k=0
     while True:
         k+=1
-        if k%10 == 0 or k== 2: #muuta tämä hakemaan configista. 60 sek vois olla ok
+        if k%30 == 0 or k== 2: #muuta tämä hakemaan configista. 60 sek vois olla ok
             naap=kyseleNaapurit()
             a.laheta(naap)
         time.sleep(1)

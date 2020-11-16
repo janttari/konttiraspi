@@ -8,6 +8,7 @@ from configobj import ConfigObj
 
 config=ConfigObj('/boot/asetukset.txt')
 skriptinHakemisto=os.path.dirname(os.path.realpath(__file__))
+#DATAT:
 meshnaapuridata={} #tässä on clientien ilmoittamien naapurihavaintojen kokonaisuus
 viimmeshnaapuridata={} #tässä on clientien ilmoittamien naapurihavaintojen kokonaisuus viimeinnen tunnettu tila vertailua varten
 MNT={} #Mac --> Nimi
@@ -16,7 +17,7 @@ havaintoaika={} #MAC aikaleima Laitenähty viimeksi
 
 def luoVisuaali():
     G = nx.Graph()
-    print("luovisuaali", meshnaapuridata, flush=True)
+    #print("luovisuaali", meshnaapuridata, flush=True)
     for isan in meshnaapuridata: #käydään isäntien naapurit läpi
         for naap in meshnaapuridata[isan]["naapurit"]:
             naapuri=naap["laite"]
@@ -127,7 +128,7 @@ class FlaskPalvelu:
 def tarkistaKadonneet(): # käydään läpi laitteiden viimeiset havaintoajat
     for laite in list(MNT):
         nahtyViimeksi=time.time()-havaintoaika[laite]
-        if nahtyViimeksi >=10:
+        if nahtyViimeksi >=180: # yli kolme minuttia näkemisestä
             #print("kadonnut", laite)
             del meshnaapuridata[laite]
             del MNT[laite]
