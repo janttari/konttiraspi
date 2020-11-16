@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ### varmistetaan onko tarpeelliset paketit asennettu ###
-paketit=(sharutils moreutils)
+paketit=(moreutils)
 asennetut=$(sudo dpkg-query -l)
 asennettavat=""
 for paketti in "${paketit[@]}";do

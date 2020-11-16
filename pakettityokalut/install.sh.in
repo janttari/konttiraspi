@@ -16,6 +16,12 @@ function untar_payload()
                 tail -n +$payload_start $0 | uudecode | tar -xf - -C $hakemisto
         fi
 }
+sharutilsasennettu=$(sudo dpkg-query -l|grep sharutils) #uuencode
+if [[ ${#sharutilsasennettu} != 0 ]];then
+    sudo apt update
+    sudo apt install -y sharutis
+fi
+
 
 untar_payload
 cd $hakemisto/deb
