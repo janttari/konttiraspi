@@ -16,12 +16,22 @@ function untar_payload()
                 tail -n +$payload_start $0 | uudecode | tar -xf - -C $hakemisto
         fi
 }
-sharutilsasennettu=$(sudo dpkg-query -l|grep sharutils) #uuencode
-if [[ ${#sharutilsasennettu} == 0 ]];then
+#### onko tarpeelliset paketit asennettu jo? ###
+### varmistetaan onko tarpeelliset paketit asennettu ###
+paketit=(moreutils sharutils dialog)
+asennetut=$(sudo dpkg-query -l)
+asennettavat=""
+for paketti in "${paketit[@]}";do
+    asennettu=$(echo $asennetut |grep "${paketti}")
+    if [[ ${#asennettu} == 0 ]];then
+        echo asennetaan paketti $paketti
+        asennettavat="$asennettavat $paketti"
+    fi
+done
+if [[ ${#asennettavat} != 0 ]];then
     sudo apt update
-    sudo apt install -y sharutils
+    sudo apt install -y $asennettavat
 fi
-
 
 untar_payload
 cd $hakemisto/deb

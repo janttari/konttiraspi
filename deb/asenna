@@ -1,21 +1,5 @@
 #!/bin/bash
 
-### varmistetaan onko tarpeelliset paketit asennettu ###
-paketit=(moreutils)
-asennetut=$(sudo dpkg-query -l)
-asennettavat=""
-for paketti in "${paketit[@]}";do
-    asennettu=$(echo $asennetut |grep "${paketti}")
-    if [[ ${#asennettu} == 0 ]];then
-        echo asennetaan paketti $paketti
-        asennettavat="$asennettavat $paketti"
-    fi
-done
-if [[ ${#asennettavat} != 0 ]];then
-    sudo apt update
-    sudo apt install -y $asennettavat
-fi
-
 ##tarkastetaan jo asennetut ominaisuudet:
 k1=$(sudo dpkg-query -l |grep konttiraspi-mesh-client)
 if [[ ${#k1} -gt 0 ]];then k1="on"; else k1="off"; fi
