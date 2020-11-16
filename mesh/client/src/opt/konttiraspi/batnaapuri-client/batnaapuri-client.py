@@ -16,7 +16,7 @@ def kyseleNaapurit(): #kyselee batmanin näkemät naapurilaitteet # [('00:c0:ca:
         if len(nmac)>0:
             jrivi+='{"mac": "'+nmac+'", "viive": "'+nviive+'", "teho": "'+nteho+'"},'
     if jrivi [:-1] != '[':
-        jrivit=jrivi[:-1]
+        jrivi=jrivi[:-1]
     jrivi=jrivi+']}'
     #print(jrivi)
     return jrivi
