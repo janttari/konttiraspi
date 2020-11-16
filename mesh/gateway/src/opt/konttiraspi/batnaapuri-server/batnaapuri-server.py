@@ -16,7 +16,7 @@ havaintoaika={} #MAC aikaleima Laitenähty viimeksi
 
 def luoVisuaali():
     G = nx.Graph()
-    print(meshnaapuridata)
+    print("luovisuaali", meshnaapuridata, flush=True)
     for isan in meshnaapuridata: #käydään isäntien naapurit läpi
         for naap in meshnaapuridata[isan]["naapurit"]:
             naapuri=naap["laite"]
@@ -107,7 +107,7 @@ class FlaskPalvelu:
 
         @self.socketio.on('selainmsg', namespace='/selain') #selaimelta tulevia komentoja
         def __receiv_message(data):
-            print("SSS",data)
+            print("SSS",data, flush=True)
 
     def lahetaMeshraspi(self,number):
         #for cl in self.clients:

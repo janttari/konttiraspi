@@ -29,25 +29,26 @@ class WsAsiakas:
     def wsYhteys(self):
         self.sio=socketio.Client()
         while not self.socketOK:
-            print("yhdistetään batnaapurit-serverille")
+            print("yhdistetään batnaapurit-serverille", flush=True)
             try:
                 self.sio.connect(config.get("batnaapuri_server"),namespaces=['/meshraspi'])
             except socketio.exceptions.ConnectionError as err:
                 print("ERR socketio ", err, flush=True)
                 time.sleep(5)
             else:
-                print("socketio conn ok")
+                print("socketio conn ok", flush=True)
                 self.socketOK=True
         @self.sio.on('connect_error')
         def connect_error(message):
-            print('Connection was rejected due to ' + message)
+            print('Connection was rejected due to ' + message, flush=True)
 
         @self.sio.on('newnumber', namespace='/meshraspi')
         def my_custom_event(data):
-            print("---", data)
+            print("---", data, flush=True)
 
     def laheta(self, sanoma):
         jsanoma=json.loads(sanoma)
+        print("Lähettää", jsanoma, flush=True)
         self.sio.emit('naapuri_message', sanoma, namespace='/meshraspi')
 
 if __name__ == "__main__":
