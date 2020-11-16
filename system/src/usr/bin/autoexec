@@ -11,39 +11,45 @@ echo mesh-ip $mesh_ip |ts '[%Y-%m-%d %H:%M:%S autoexec       ]' >>$LOKITIEDOSTO
 
 ### mesh client ###
 if [[ "$mesh_type" == "client" ]]; then
-    echo "* mesh  client up" | ts '[%Y-%m-%d %H:%M:%S autoexec       ]' >>$LOKITIEDOSTO &
+    echo "* mesh  client up" | ts '[%Y-%m-%d %H:%M:%S autoexec       ]' >>$LOKITIEDOSTO
     /opt/konttiraspi/mesh-client/meshclient up 2>&1 | ts '[%Y-%m-%d %H:%M:%S mesh-client   ]' >>$LOKITIEDOSTO &
+    sleep 0.3
 fi
 
 ### mesh gateway ###
 if [[ "$mesh_type" == "gateway" ]]; then
-    echo "* mesh  gateway up" | ts '[%Y-%m-%d %H:%M:%S autoexec       ]' >>$LOKITIEDOSTO &
+    echo "* mesh  gateway up" | ts '[%Y-%m-%d %H:%M:%S autoexec       ]' >>$LOKITIEDOSTO
     /opt/konttiraspi/mesh-gateway/meshgateway up 2>&1 |ts '[%Y-%m-%d %H:%M:%S mesh-gateway   ]' >>$LOKITIEDOSTO &
+    sleep 0.3
 fi
 
 ### sähkömittari server ###
 if [[ "$sahkomittari_type" == "server" ]]; then
-    echo "* sahkomittari server up" | ts '[%Y-%m-%d %H:%M:%S autoexec       ]' >>$LOKITIEDOSTO &
+    echo "* sahkomittari server up" | ts '[%Y-%m-%d %H:%M:%S autoexec       ]' >>$LOKITIEDOSTO
     /opt/konttiraspi/sahkomittari-server/sahkomittari-server.py 2>&1 |ts '[%Y-%m-%d %H:%M:%S sm-server      ]' >>$LOKITIEDOSTO &
+    sleep 0.3
 fi
 
 ### sähkömittari client ###
 if [[ "$sahkomittari_type" == "client" ]]; then
-    echo "* sahkomittari  client up" | ts '[%Y-%m-%d %H:%M:%S autoexec       ]' >>$LOKITIEDOSTO &
+    echo "* sahkomittari  client up" | ts '[%Y-%m-%d %H:%M:%S autoexec       ]' >>$LOKITIEDOSTO
     /opt/konttiraspi/sahkomittari-client/raspisahkomittari.py 2>&1 |ts '[%Y-%m-%d %H:%M:%S sm-client      ]' >>$LOKITIEDOSTO &
+    sleep 0.3
 fi
 
 #batnaapuri_type=client
 ### batnaapuri server ###
 if [[ "$batnaapuri_type" == "server" ]]; then
-    echo "* batnaapuri server up" | ts '[%Y-%m-%d %H:%M:%S autoexec       ]' >>$LOKITIEDOSTO &
+    echo "* batnaapuri server up" | ts '[%Y-%m-%d %H:%M:%S autoexec       ]' >>$LOKITIEDOSTO
     /opt/konttiraspi/batnaapuri-server/batnaapuri-server.py 2>&1 |ts '[%Y-%m-%d %H:%M:%S bn-server      ]' >>$LOKITIEDOSTO &
+    sleep 0.3
 fi
 
 ### batnaapuri client ###
 if [[ "$batnaapuri_type" == "client" ]]; then
-    echo "* batnaapuri  client up" | ts '[%Y-%m-%d %H:%M:%S autoexec       ]' >>$LOKITIEDOSTO &
+    echo "* batnaapuri  client up" | ts '[%Y-%m-%d %H:%M:%S autoexec       ]' >>$LOKITIEDOSTO
     /opt/konttiraspi/batnaapuri-client/batnaapuri-client.py 2>&1 |ts '[%Y-%m-%d %H:%M:%S bn-client      ]' >>$LOKITIEDOSTO &
+    sleep 0.3
 fi
 
 

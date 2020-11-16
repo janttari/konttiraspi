@@ -5,7 +5,7 @@ if [[ $1 == "up" ]]; then
         echo "On jo käynnissä!"
         exit 1
     fi
-    echo "Käynnistetään mesh-client taajuudelle $mhz Mhz (wifi-kanava: $kanava) laite: $laite"
+     echo "Käynnistetään mesh-client taajuudelle $mesh_mhz Mhz käyttäen laitetta $mesh_device"
     #sudo modprobe -r 88XXau && sudo modprobe 88XXau rtw_vht_enable=2 rtw_power_mgnt=0 # rtw_enusbss=0
     #sudo modprobe -r 8812au && sudo modprobe 8812au rtw_power_mgnt=0 rtw_enusbss=0
     #sleep 3

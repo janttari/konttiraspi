@@ -10,7 +10,7 @@ if [[ $1 == "up" ]]; then
     #sudo iw reg set US
     # sudo iw wlan1 set txpower fixed 3000
 
-    echo "Käynnistetään mesh-gateway taajuudelle $mhz Mhz (wifi-kanava: $kanava)"
+    echo "Käynnistetään mesh-gateway taajuudelle $mesh_mhz Mhz käyttäen laitetta $mesh_device"
     #sudo modprobe -r 88XXau && sudo modprobe 88XXau rtw_vht_enable=2
     sudo modprobe batman-adv 2>/dev/null
     sudo killall wpa_supplicant 2>/dev/null
