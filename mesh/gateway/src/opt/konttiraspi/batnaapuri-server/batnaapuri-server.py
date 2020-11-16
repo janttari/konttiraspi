@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 from flask_socketio import SocketIO, emit
 from flask import Flask, render_template, url_for, copy_current_request_context, request
-import time, threading, logging, sys, matplotlib, json
+import time, threading, logging, sys, matplotlib, json, os
 import networkx as nx #emuloi kontti-raspberryjen MESH-verkkoa jossa raspit raportoi naapuri laitteistaan tälle serverille
 import matplotlib.pyplot as plt
 from configobj import ConfigObj
 
 config=ConfigObj('/boot/asetukset.txt')
-
+skriptinHakemisto=os.path.dirname(os.path.realpath(__file__))
 meshnaapuridata={} #tässä on clientien ilmoittamien naapurihavaintojen kokonaisuus
 viimmeshnaapuridata={} #tässä on clientien ilmoittamien naapurihavaintojen kokonaisuus viimeinnen tunnettu tila vertailua varten
 MNT={} #Mac --> Nimi
@@ -30,7 +30,7 @@ def luoVisuaali():
     nx.draw(G, pos,with_labels = True, node_color ='blue', node_size=3000, font_size=8, font_color="yellow")
     edge_labels = nx.get_edge_attributes(G,'valimatka')
     nx.draw_networkx_edge_labels(G, pos, edge_labels = edge_labels)
-    plt.savefig('static/kartta.png')
+    plt.savefig(skriptinHakemisto+'/static/kartta.png')
     #plt.clf()
     #plt.cla()
     plt.close()
