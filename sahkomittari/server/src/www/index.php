@@ -68,8 +68,8 @@ ws.onmessage = function(event) {
 <br>
 <table border=1><tr><td width="300">nähty</td><td width="100">id</td><td width="100">numero</td><td width="100">nimi</td><td width="100">kwh</td><td width="100">reaaliaik</td><td width="100">pulssit</td><td width="100">info</td><td width="100">lampo</td><td width="100">kosteus</td><td width="100">historia</td></tr>
 <?php 
-    $db_asiakkaat = new SQLite3('/opt/sahkomittari-server/data/asiakkaat.db');
-    $db_kulutus = new SQLite3('/opt/sahkomittari-server/data/kulutus.db');
+    $db_asiakkaat = new SQLite3('/opt/konttiraspi/sahkomittari-server/data/asiakkaat.db');
+    $db_kulutus = new SQLite3('/opt/konttiraspi/sahkomittari-server/data/kulutus.db');
     $sql = "SELECT * from asiakkaat";
     $ret_asiakkaat = $db_asiakkaat->query($sql);
     while($row = $ret_asiakkaat->fetchArray(SQLITE3_ASSOC) ) {

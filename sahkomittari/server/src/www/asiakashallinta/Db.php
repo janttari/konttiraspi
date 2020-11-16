@@ -26,20 +26,20 @@ class Db {
 		return $this->db->exec("INSERT INTO asiakkaat (id, nimi, numero) VALUES ('$id', '$nimi', '$numero')");
 	}
 
-	public function update($id, $id, $nimi, $numero){
-		return $this->db->query("UPDATE asiakkaat set id='$id', nimi='$nimi', numero='$numero' WHERE rowid=$id");
+	public function update($tunniste, $id, $nimi, $numero){
+		return $this->db->query("UPDATE asiakkaat set id='$id', nimi='$nimi', numero='$numero' WHERE rowid=$tunniste");
 	}
 
-	public function delete($id){
-		return $this->db->query("DELETE FROM asiakkaat WHERE rowid=$id");
+	public function delete($tunniste){
+		return $this->db->query("DELETE FROM asiakkaat WHERE rowid=$tunniste");
 	}
 
 	public function getAll(){
 		return $this->db->query("SELECT rowid, * FROM asiakkaat");
 	}
 
-	public function getById($id){
-		return $this->db->query("SELECT rowid, * FROM asiakkaat WHERE rowid=$id");
+	public function getById($tunniste){
+		return $this->db->query("SELECT rowid, * FROM asiakkaat WHERE rowid=$tunniste");
 	}
 }
 

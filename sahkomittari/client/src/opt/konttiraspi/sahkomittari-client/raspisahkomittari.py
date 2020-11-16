@@ -142,7 +142,7 @@ class WsAsiakas(): #------------------------------------------------------------
 #------------------------------------------------------------------------------------------------------------------------------------
 
 def lahetaWsServerille(data): #Tämä kutsutaan kun pulssien saatu
-    wsAsiakas.lahetaWs('{"raspilta": '+data+'}')
+    wsAsiakas.lahetaWs('{"raspilta": '+data+'}') #!!! MUUTA TÄÄ NIIN ETTÄ KERROTAAN OMA NIMI
 
 def tallennaPulssi(): # Tallentaa pulssilukeman pysyväksi
     #lokita("tallenapulssi pysyvään tiedostoon. lukema on nyt:"+str(mittari.getPulssilukema()))

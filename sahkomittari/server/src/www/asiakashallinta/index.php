@@ -8,10 +8,11 @@ function autoloader($class){
 	include("$class.php");
 }
 
-$db = new Db('/opt/sahkomittari-server/data/asiakkaat.db');
+$db = new Db('/opt/konttiraspi/sahkomittari-server/data/asiakkaat.db');
 
 //inserting data
 if( isset($_POST['ADD_ASIAKAS']) ){
+        //$tunniste =$_POST['tunniste'];
         $id = $_POST['id'];
 	$nimi = $_POST['nimi'];
 	$numero = $_POST['numero'];
