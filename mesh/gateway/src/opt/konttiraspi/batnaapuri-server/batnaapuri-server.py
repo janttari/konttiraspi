@@ -11,6 +11,7 @@ config=ConfigObj('/boot/asetukset.txt')
 meshnaapuridata={} #tässä on clientien ilmoittamien naapurihavaintojen kokonaisuus
 viimmeshnaapuridata={} #tässä on clientien ilmoittamien naapurihavaintojen kokonaisuus viimeinnen tunnettu tila vertailua varten
 MNT={} #Mac --> Nimi
+MIP={} #MAC --> IP
 havaintoaika={} #MAC aikaleima Laitenähty viimeksi
 
 def luoVisuaali():
@@ -85,8 +86,10 @@ class FlaskPalvelu:
         def __receiv_message(data):
             jdata=json.loads(data)
             isantaNimi=jdata["laite"]
+            isantaIP=jdata["ip"]
             isantaMAC=jdata["mac"]
             MNT[isantaMAC]=isantaNimi #päivitetään nimet
+            MIP[isantaMAC]=isantaIP
             havaintoaika[isantaMAC]=time.time()
             naap=[]
             for j in jdata["data"]:
@@ -95,8 +98,7 @@ class FlaskPalvelu:
                 nviive=j["viive"]
                 kohde={"laite": nmac, "teho": nteho, "viive": nviive}
                 naap.append(kohde)
-            aika=time.time()
-            meshnaapuridata[isantaMAC]={"naapurit": naap, "havaintoaika": aika}
+            meshnaapuridata[isantaMAC]={"naapurit": naap}
             vertaaNaapuriMuutoksia()
 
         @self.socketio.on('selainmsg', namespace='/selain') #selaimelta tulevia komentoja
