@@ -18,7 +18,7 @@ function untar_payload()
 }
 #### onko tarpeelliset paketit asennettu jo? ###
 paketit=(moreutils sharutils dialog)
-sudo apt update
+#sudo apt update
 for paketti in "${paketit[@]}";do
     asennettu=$(dpkg -l "$paketti" |tail -n 1 |grep "^un")
     if [[ ${#asennettu} != 0 ]];then
