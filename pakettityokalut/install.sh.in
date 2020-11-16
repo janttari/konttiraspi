@@ -17,7 +17,7 @@ function untar_payload()
         fi
 }
 sharutilsasennettu=$(sudo dpkg-query -l|grep sharutils) #uuencode
-if [[ ${#sharutilsasennettu} != 0 ]];then
+if [[ ${#sharutilsasennettu} == 0 ]];then
     sudo apt update
     sudo apt install -y sharutis
 fi
