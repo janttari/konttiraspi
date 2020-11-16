@@ -34,7 +34,7 @@ class WsAsiakas:
                 self.sio.connect(config.get("batnaapuri_server"),namespaces=['/meshraspi'])
                 self.socketOK=True
             except:
-                print("ERR socketio")
+                print("ERR socketio", flush=True)
                 self.socketOK=False
                 time.sleep(5)
         @self.sio.on('connect_error')
