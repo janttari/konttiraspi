@@ -24,14 +24,14 @@ if [[ "$mesh_type" == "gateway" ]]; then
 fi
 
 ### sähkömittari server ###
-if [[ "$sahkomittari_type" == "server" ]]; then
+if [[ "$sm_type" == "server" ]]; then
     echo "* sahkomittari server up" | ts '[%Y-%m-%d %H:%M:%S autoexec       ]' >>$LOKITIEDOSTO
     /opt/konttiraspi/sahkomittari-server/sahkomittari-server.py 2>&1 |ts '[%Y-%m-%d %H:%M:%S sm-server      ]' >>$LOKITIEDOSTO &
     sleep 0.3
 fi
 
 ### sähkömittari client ###
-if [[ "$sahkomittari_type" == "client" ]]; then
+if [[ "$sm_type" == "client" ]]; then
     echo "* sahkomittari  client up" | ts '[%Y-%m-%d %H:%M:%S autoexec       ]' >>$LOKITIEDOSTO
     /opt/konttiraspi/sahkomittari-client/raspisahkomittari.py 2>&1 |ts '[%Y-%m-%d %H:%M:%S sm-client      ]' >>$LOKITIEDOSTO &
     sleep 0.3

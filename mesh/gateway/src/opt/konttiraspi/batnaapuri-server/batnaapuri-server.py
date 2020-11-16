@@ -16,13 +16,14 @@ havaintoaika={} #MAC aikaleima Laitenähty viimeksi
 
 def luoVisuaali():
     G = nx.Graph()
+    print(meshnaapuridata)
     for isan in meshnaapuridata: #käydään isäntien naapurit läpi
         for naap in meshnaapuridata[isan]["naapurit"]:
             naapuri=naap["laite"]
-            if naapuri=='':
-                break
+            #if naapuri=='':
+            #    break
             teho=naap["teho"]
-            print(teho)
+            #print(teho)
             G.add_edge(isan[-5:], naapuri[-5:], valimatka=int(40-float(teho)))
     pos = nx.spring_layout(G, seed=0)
     plt.figure(figsize=(9, 9))

@@ -11,10 +11,14 @@ def kyseleNaapurit(): #kyselee batmanin näkemät naapurilaitteet # [('00:c0:ca:
     jrivi='{"laite": "'+config.get("mesh_name")+'", "mac": "'+tamaLaiteMAC+'", "ip": "'+tamaLaiteIP+'", "data":  ['
     for n in naapuritraaka:
         nmac = n[0:17]
-        nviive = n[20:26]
+        nviive = n[19:26]
         nteho = n[36:40]
-        jrivi+='{"mac": "'+nmac+'", "viive": "'+nviive+'", "teho": "'+nteho+'"},'
-    jrivi=jrivi[:-1]+']}'
+        if len(nmac)>0:
+            jrivi+='{"mac": "'+nmac+'", "viive": "'+nviive+'", "teho": "'+nteho+'"},'
+    if jrivi [:-1] != '[':
+        jrivit=jrivi[:-1]
+    jrivi=jrivi+']}'
+    #print(jrivi)
     return jrivi
 
 class WsAsiakas:

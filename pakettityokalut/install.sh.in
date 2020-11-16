@@ -20,7 +20,6 @@ function untar_payload()
 paketit=(moreutils sharutils dialog)
 sudo apt update
 for paketti in "${paketit[@]}";do
-    echo $paketti
     asennettu=$(dpkg -l "$paketti" |tail -n 1 |grep "^un")
     if [[ ${#asennettu} != 0 ]];then
         echo Asennetaan paketti $paketti
