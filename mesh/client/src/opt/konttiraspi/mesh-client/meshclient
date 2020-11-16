@@ -30,7 +30,7 @@ if [[ $1 == "up" ]]; then
     sudo ip link set up dev mesh-bridge
     sudo ip addr add $mesh_ip/24 broadcast $mesh_broadcast dev mesh-bridge
     sudo ip route del default 2>/dev/null
-    sudo ip route add default via $gateway
+    sudo ip route add default via $mesh_gateway
     #echo -e "Odottaa verkkoa\c"
     #while true; do
     #    if ping -c 1 -W 1 8.8.8.8 &> /dev/null
