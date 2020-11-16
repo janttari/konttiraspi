@@ -6,9 +6,6 @@ if [[ $1 == "up" ]]; then
         echo "On jo käynnissä!"
         exit 1
     fi
-    #sudo iw reg get
-    #sudo iw reg set US
-    # sudo iw wlan1 set txpower fixed 3000
 
     echo "Käynnistetään mesh-gateway taajuudelle $mesh_mhz Mhz käyttäen laitetta $mesh_device"
     #sudo modprobe -r 88XXau && sudo modprobe 88XXau rtw_vht_enable=2
@@ -17,7 +14,7 @@ if [[ $1 == "up" ]]; then
     sudo sysctl -w net.ipv4.ip_forward=1 >/dev/null
     sudo ip link set $mesh_device down
     sudo iw reg set $mesh_country
-    sudo  iwconfig wlan1 txpower $mesh_txpower
+    sudo  iwconfig $mesh_device txpower $mesh_txpower
     #sudo iw $laite set txpower fixed 3000
     sudo ip link set mtu $mesh_mtu dev $mesh_device
     sleep 1

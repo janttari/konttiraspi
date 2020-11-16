@@ -6,11 +6,11 @@ if [[ $1 == "up" ]]; then
         exit 1
     fi
      echo "Käynnistetään mesh-client taajuudelle $mesh_mhz Mhz käyttäen laitetta $mesh_device"
-    #sudo modprobe -r 88XXau && sudo modprobe 88XXau rtw_vht_enable=2 rtw_power_mgnt=0 # rtw_enusbss=0
-    #sudo modprobe -r 8812au && sudo modprobe 8812au rtw_power_mgnt=0 rtw_enusbss=0
-    #sleep 3
     sudo modprobe batman-adv
     sudo killall wpa_supplicant 2>/dev/null
+    sudo ip link set $mesh_device down
+    sudo iw reg set $mesh_country
+    sudo iwconfig $mesh_device txpower $mesh_txpower
     sudo ip link set mtu $mesh_mtu dev $mesh_device
     sleep 1
     sudo iw $mesh_device set type ibss
@@ -31,17 +31,18 @@ if [[ $1 == "up" ]]; then
     sudo ip addr add $mesh_ip/24 broadcast $mesh_broadcast dev mesh-bridge
     sudo ip route del default 2>/dev/null
     sudo ip route add default via $gateway
-    echo -e "Odottaa verkkoa\c"
-    while true; do
-        if ping -c 1 -W 1 8.8.8.8 &> /dev/null
-        then
-            break
-        fi
-        echo -e ".\c"
-        sleep 1
-    done
-    echo
+    #echo -e "Odottaa verkkoa\c"
+    #while true; do
+    #    if ping -c 1 -W 1 8.8.8.8 &> /dev/null
+    #    then
+    #        break
+    #    fi
+    #    echo -e ".\c"
+    #    sleep 1
+    #done
+    #echo
     echo Valmis
+
 elif [[ $1 == "down" ]];then
     if !(lsmod|grep batman_adv) >/dev/null;then
         echo "Ei ole käynnissä!"
