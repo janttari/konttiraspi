@@ -22,15 +22,15 @@ def tallennaPysyvat(): # Tallennetaan kulutuslukemat pysyvään paikalliseen tie
     ulkokosteus=-127.0
     conn = sqlite3.connect("/opt/konttiraspi/sahkomittari-server/data/kulutus.db")
     c = conn.cursor()
-    for asiakasIP in kwhMuisti: #käydään kaikki asiakkaa läpi yksi kerrallaan #TARKISTA TÄÄ OSUUS, LASKEE VÄÄRIN?
-        kys=c.execute('SELECT kwh FROM kulutus WHERE IP="'+asiakasIP+'" ORDER BY aikaleima DESC LIMIT 1') #lasketaan ensin tunnin aikana tapahtunut kulutus vertaamalla nykyistä viimeksi tietokantaan tallennettuun lukemaan
+    for asiakasID in kwhMuisti: #käydään kaikki asiakkaa läpi yksi kerrallaan #TARKISTA TÄÄ OSUUS, LASKEE VÄÄRIN?
+        kys=c.execute('SELECT kwh FROM kulutus WHERE IP="'+asiakasID+'" ORDER BY aikaleima DESC LIMIT 1') #lasketaan ensin tunnin aikana tapahtunut kulutus vertaamalla nykyistä viimeksi tietokantaan tallennettuun lukemaan
         edtunti=None
         for i in kys:
             edtunti=str(i[0])
         if edtunti is None: #tietokannassa ei vielä ole kulutustietoa...
-            edtunti=float(kwhMuisti[asiakasIP]) #...joten kaikki kulutus on tälle tunnille
-        tuntikohtainen=str(float(kwhMuisti[asiakasIP])-float(edtunti))
-        c.execute('INSERT into kulutus(aikaleima, ip, kwh, pulssit, tuntikohtainen, lampo, kosteus, ulkolampo, ulkokosteus) VALUES("'+aika+'", "'+asiakasIP+'", '+str(kwhMuisti[asiakasIP])+', '+str(pulssiMuisti[asiakasIP])+', '+str(tuntikohtainen)+', '+str(lampoMuisti[asiakasIP])+', '+str(kosteusMuisti[asiakasIP])+', '+str(ulkolampo)+', '+str(ulkokosteus)+')')
+            edtunti=float(kwhMuisti[asiakasID]) #...joten kaikki kulutus on tälle tunnille
+        tuntikohtainen=str(float(kwhMuisti[asiakasID])-float(edtunti))
+        c.execute('INSERT into kulutus(aikaleima, ip, kwh, pulssit, tuntikohtainen, lampo, kosteus, ulkolampo, ulkokosteus) VALUES("'+aika+'", "'+asiakasID+'", '+str(kwhMuisti[asiakasID])+', '+str(pulssiMuisti[asiakasID])+', '+str(tuntikohtainen)+', '+str(lampoMuisti[asiakasID])+', '+str(kosteusMuisti[asiakasID])+', '+str(ulkolampo)+', '+str(ulkokosteus)+')')
     conn.commit()
     conn.close()
 #---------------------------------------------------------------------------------------------------------------------------------------------

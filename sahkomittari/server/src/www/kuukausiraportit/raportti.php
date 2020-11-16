@@ -16,17 +16,17 @@
         $sql = "SELECT * from asiakkaat";
         $ret_asiakkaat = $db_asiakkaat->query($sql);
         echo "<pre>";
-        echo "ip;numero;nimi;kulutus\n";
+        echo "id;numero;nimi;kulutus\n";
         while($row = $ret_asiakkaat->fetchArray(SQLITE3_ASSOC) ) {
             //Kysellään kuukauden ensimmäinen kulutuslukema, koska siinä on edellisen kuukauden loppulukema
-            $sql = "SELECT * from kulutus WHERE ip='".$row['ip']."' AND strftime('%Y-%m', aikaleima) = '".$vuosi."-".$kuukausi."'  ORDER BY aikaleima LIMIT 1";
+            $sql = "SELECT * from kulutus WHERE id='".$row['id']."' AND strftime('%Y-%m', aikaleima) = '".$vuosi."-".$kuukausi."'  ORDER BY aikaleima LIMIT 1";
             $ret_kulutus = $db_kulutus->query($sql);
             $row_kulutus = $ret_kulutus->fetchArray(SQLITE3_ASSOC);
             $kwh=$row_kulutus['kwh'];
             $pulssit=$row_kulutus['pulssit'];
             $lampo=$row_kulutus['lampo'];
             $kosteus=$row_kulutus['kosteus'];
-            echo $row['ip'] . ";" . $row['numero'] . ";" . $row['nimi'] . ";" .$kwh . ";<br>";
+            echo $row['id'] . ";" . $row['numero'] . ";" . $row['nimi'] . ";" .$kwh . ";<br>";
         }
         echo "</pre>";
         $db_asiakkaat->close();

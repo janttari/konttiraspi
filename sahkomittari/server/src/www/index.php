@@ -66,21 +66,21 @@ ws.onmessage = function(event) {
     </tr>
 </table>
 <br>
-<table border=1><tr><td width="300">nähty</td><td width="100">ip</td><td width="100">numero</td><td width="100">nimi</td><td width="100">kwh</td><td width="100">reaaliaik</td><td width="100">pulssit</td><td width="100">info</td><td width="100">lampo</td><td width="100">kosteus</td><td width="100">historia</td></tr>
+<table border=1><tr><td width="300">nähty</td><td width="100">id</td><td width="100">numero</td><td width="100">nimi</td><td width="100">kwh</td><td width="100">reaaliaik</td><td width="100">pulssit</td><td width="100">info</td><td width="100">lampo</td><td width="100">kosteus</td><td width="100">historia</td></tr>
 <?php 
     $db_asiakkaat = new SQLite3('/opt/sahkomittari-server/data/asiakkaat.db');
     $db_kulutus = new SQLite3('/opt/sahkomittari-server/data/kulutus.db');
     $sql = "SELECT * from asiakkaat";
     $ret_asiakkaat = $db_asiakkaat->query($sql);
     while($row = $ret_asiakkaat->fetchArray(SQLITE3_ASSOC) ) {
-        $sql = "SELECT * from kulutus WHERE IP='".$row['ip']."' ORDER BY aikaleima DESC LIMIT 1";
+        $sql = "SELECT * from kulutus WHERE ID='".$row['id']."' ORDER BY aikaleima DESC LIMIT 1";
         $ret_kulutus = $db_kulutus->query($sql);
         $row_kulutus = $ret_kulutus->fetchArray(SQLITE3_ASSOC);
         $kwh=$row_kulutus['kwh'];
         $pulssit=$row_kulutus['pulssit'];
         $lampo=$row_kulutus['lampo'];
         $kosteus=$row_kulutus['kosteus'];
-        echo "<tr><td id=nahty_".$row['ip'].">---</td></td---><td>". $row['ip'] . "</td><td>". $row['numero'] ."</td><td>". $row['nimi'] ."</td><td id=kwh_".$row['ip'].">".$kwh."</td><td id=reaali_".$row['ip'].">---</td><td id=pulssit_".$row['ip'].">".$pulssit."</td></td><td id=info_".$row['ip'].">REC</td><td id=lampo_".$row['ip'].">...</td><td id=kosteus_".$row['ip'].">...</td><td><a href=\"historia.php?ip=".$row['ip']."\">historia</a></td></tr><br>";
+        echo "<tr><td id=nahty_".$row['id'].">---</td></td---><td>". $row['id'] . "</td><td>". $row['numero'] ."</td><td>". $row['nimi'] ."</td><td id=kwh_".$row['id'].">".$kwh."</td><td id=reaali_".$row['id'].">---</td><td id=pulssit_".$row['id'].">".$pulssit."</td></td><td id=info_".$row['id'].">REC</td><td id=lampo_".$row['id'].">...</td><td id=kosteus_".$row['id'].">...</td><td><a href=\"historia.php?id=".$row['id']."\">historia</a></td></tr><br>";
     }
    
     $db_asiakkaat->close();

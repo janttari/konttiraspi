@@ -15,19 +15,19 @@ class Db {
 
 
 	public function createStudentTable(){
-		return $this->db->exec('CREATE TABLE IF NOT EXISTS asiakkaat (ip TEXT, nimi TEXT, numero TEXT)');
+		return $this->db->exec('CREATE TABLE IF NOT EXISTS asiakkaat (id TEXT, nimi TEXT, numero TEXT)');
 	}
 
 	public function dropStudentTable(){
 		return $this->db->exec('DROP TABLE asiakkaat');
 	}
 
-	public function insert($ip, $nimi, $numero){
-		return $this->db->exec("INSERT INTO asiakkaat (ip, nimi, numero) VALUES ('$ip', '$nimi', '$numero')");
+	public function insert($id, $nimi, $numero){
+		return $this->db->exec("INSERT INTO asiakkaat (id, nimi, numero) VALUES ('$id', '$nimi', '$numero')");
 	}
 
-	public function update($id, $ip, $nimi, $numero){
-		return $this->db->query("UPDATE asiakkaat set ip='$ip', nimi='$nimi', numero='$numero' WHERE rowid=$id");
+	public function update($id, $id, $nimi, $numero){
+		return $this->db->query("UPDATE asiakkaat set id='$id', nimi='$nimi', numero='$numero' WHERE rowid=$id");
 	}
 
 	public function delete($id){

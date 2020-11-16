@@ -8,9 +8,9 @@ var socketUrl = 'ws://'+location.hostname+":8889";
 var ws = new  WebSocket(socketUrl);
 
 function lahetatavu(){ //lähetetään tavu releelle
-    let ip=document.getElementById("ip").value;
+    let id=document.getElementById("id").value;
     let tavu=document.getElementById("tavu").value;
-    let etakomento='{"komento": {"laite": "'+ip+'", "tavu": "'+tavu+'"}}';
+    let etakomento='{"komento": {"laite": "'+id+'", "tavu": "'+tavu+'"}}';
     console.log("Lähettää: "+etakomento);
     ws.send(etakomento);
 

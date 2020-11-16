@@ -12,10 +12,10 @@ $db = new Db('/opt/sahkomittari-server/data/asiakkaat.db');
 
 //inserting data
 if( isset($_POST['ADD_ASIAKAS']) ){
-        $ip = $_POST['ip'];
+        $id = $_POST['id'];
 	$nimi = $_POST['nimi'];
 	$numero = $_POST['numero'];
-	if( $db->insert($ip, $nimi, $numero) ){
+	if( $db->insert($id, $nimi, $numero) ){
 		$msg = array('1', "Asiakas lisätty.");
 	}else{
 		$msg = array('0', "Asiakkaan lisääminen epäonnistui.");
@@ -25,17 +25,17 @@ if( isset($_POST['ADD_ASIAKAS']) ){
 
 //geting edit items
 if( isset($_REQUEST['edit']) ){
-	$id = $_GET['id'];
-	$data = $db->getById($id)->fetchArray();
+	$tunniste = $_GET['tunniste'];
+	$data = $db->getById($tunniste)->fetchArray();
 }
 
 //updateing data
 if( isset($_POST['UPDATE_ASIAKAS']) ){
-	$id = $_POST['id'];
-        $ip = $_POST['ip'];
+	$tunniste = $_POST['tunniste'];
+        $id = $_POST['id'];
 	$nimi = $_POST['nimi'];
 	$numero = $_POST['numero'];
-	if( $db->update($id, $ip, $nimi, $numero) ){
+	if( $db->update($tunniste, $id, $nimi, $numero) ){
 		$msg = array('1', "Asiakas päivitetty.");
 	}else{
 		$msg = array('0', "Asiakkaan päivittäminen epäonnistui.");
@@ -47,8 +47,8 @@ if( isset($_POST['UPDATE_ASIAKAS']) ){
 
 //deleting data
 if( isset($_REQUEST['delete']) ){
-	$id = $_GET['id'];
-	if( $db->delete($id) ){
+	$tunniste = $_GET['tunniste'];
+	if( $db->delete($tunniste) ){
 		$msg = array('1', "Asiakkaan poistaminen onnitui.");
 	}else{
 		$msg = array('0', "Asiakkaan poistaminen epäonnistui.");
@@ -81,15 +81,15 @@ $isEdit = isset($_REQUEST['edit']) ? true : false;
 	<div style="margin: 0 auto; width: 800px;">
 		<div>
 			<form style="display:<?php echo $isEdit ? 'none':'block'; ?>" action="" method="post">
-                                <input type="text" name='ip' placeholder="Anna IP" required="">
+                                <input type="text" name='id' placeholder="Anna ID" required="">
 				<input type="text" name='nimi' placeholder="Anna kontin nimi" required="">
 				<input type="text" name='numero' placeholder="Anna kontin numero" required="">
 				<input type="submit" name="ADD_ASIAKAS" value="Lisää">
 			</form>
 
 			<form style="display:<?php echo $isEdit ? 'block':'none'; ?>" action="" method="post">
-				<input type="hidden" name="id" value="<?php echo isset($data) ? $data['rowid'] : ''; ?>">
-                                <input type="text" name='ip' value="<?php echo isset($data) ? $data['ip'] : ''; ?>" placeholder="Anna IP">
+				<input type="hidden" name="tunniste" value="<?php echo isset($data) ? $data['rowid'] : ''; ?>">
+                                <input type="text" name='id' value="<?php echo isset($data) ? $data['id'] : ''; ?>" placeholder="Anna ID">
 				<input type="text" name='nimi' value="<?php echo isset($data) ? $data['nimi'] : ''; ?>" placeholder="Anna nimi">
 				<input type="text" name='numero' value="<?php echo isset($data) ? $data['numero'] : ''; ?>" placeholder="Anna numero" required="">
 				<input type="submit" name="UPDATE_ASIAKAS" value="Tallenna">
@@ -101,8 +101,8 @@ $isEdit = isset($_REQUEST['edit']) ? true : false;
 		</div>
 		<table cellpadding="5" border="1" width="100%">
 			<tr>
+				<td>Tunniste</td>
 				<td>ID</td>
-				<td>IP</td>
                                 <td>Nimi</td>
 				<td>Numero</td>
 				<td>Toiminto</td>
@@ -115,12 +115,12 @@ $isEdit = isset($_REQUEST['edit']) ? true : false;
 				
 			<tr>
 				<td><?php echo $row['rowid'];?></td>
-				<td><?php echo $row['ip'];?></td>
+				<td><?php echo $row['id'];?></td>
                                 <td><?php echo $row['nimi'];?></td>
 				<td><?php echo $row['numero'];?></td>
 				<td>
-					<a href="?edit=true&id=<?php echo $row['rowid']; ?>">Muuta</a> | 
-					<a href="?delete=true&id=<?php echo $row['rowid']; ?>" onclick="return confirm('Are you sure?');">Poista</a>
+					<a href="?edit=true&tunniste=<?php echo $row['rowid']; ?>">Muuta</a> | 
+					<a href="?delete=true&tunniste=<?php echo $row['rowid']; ?>" onclick="return confirm('Are you sure?');">Poista</a>
 				</td>
 			</tr>
 			<?php } ?>
