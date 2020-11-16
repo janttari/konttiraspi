@@ -19,7 +19,10 @@ def luoVisuaali():
     for isan in meshnaapuridata: #käydään isäntien naapurit läpi
         for naap in meshnaapuridata[isan]["naapurit"]:
             naapuri=naap["laite"]
+            if naapuri=='':
+                break
             teho=naap["teho"]
+            print(teho)
             G.add_edge(isan[-5:], naapuri[-5:], valimatka=int(40-float(teho)))
     pos = nx.spring_layout(G, seed=0)
     plt.figure(figsize=(9, 9))
