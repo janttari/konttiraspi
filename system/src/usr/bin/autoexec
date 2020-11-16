@@ -1,36 +1,51 @@
 #!/bin/bash
-whoami >>/tmp/autoexec.txt
-date >>/tmp/autoexec.txt
+LOKITIEDOSTO="/home/pi/konttiloki.txt"
 
 ### lataa asetukset muistiin ###
 . /boot/asetukset.txt
 
 
+echo "*****************************************" |ts '[%Y-%m-%d %H:%M:%S autoexec       ]' >>$LOKITIEDOSTO
+whoami |ts '[%Y-%m-%d %H:%M:%S autoexec       ]' >>$LOKITIEDOSTO
+echo mesh-ip $mesh_ip |ts '[%Y-%m-%d %H:%M:%S autoexec       ]' >>$LOKITIEDOSTO
+
 ### mesh client ###
 if [[ "$mesh_type" == "client" ]]; then
-    echo mesh  client  >>/tmp/autoexec.txt
-    /opt/konttiraspi/mesh-client/meshclient up &
+    echo "* mesh  client up" | ts '[%Y-%m-%d %H:%M:%S autoexec       ]' >>$LOKITIEDOSTO &
+    /opt/konttiraspi/mesh-client/meshclient up 2>&1 | ts '[%Y-%m-%d %H:%M:%S mesh-client   ]' >>$LOKITIEDOSTO &
 fi
 
 ### mesh gateway ###
 if [[ "$mesh_type" == "gateway" ]]; then
-    echo mesh  gateway  >>/tmp/autoexec.txt
-    /opt/konttiraspi/mesh-gateway/meshgateway &
+    echo "* mesh  gateway up" | ts '[%Y-%m-%d %H:%M:%S autoexec       ]' >>$LOKITIEDOSTO &
+    /opt/konttiraspi/mesh-gateway/meshgateway 2>&1 |ts '[%Y-%m-%d %H:%M:%S mesh-gateway   ]' >>$LOKITIEDOSTO &
 fi
 
 ### sähkömittari server ###
 if [[ "$sahkomittari_type" == "server" ]]; then
-    echo sähkömittari server  >>/tmp/autoexec.txt
-    /opt/konttiraspi/sahkomittari-server/sahkomittari-server.py &
+    echo "* sahkomittari server up" | ts '[%Y-%m-%d %H:%M:%S autoexec       ]' >>$LOKITIEDOSTO &
+    /opt/konttiraspi/sahkomittari-server/sahkomittari-server.py 2>&1 |ts '[%Y-%m-%d %H:%M:%S sm-server      ]' >>$LOKITIEDOSTO &
 fi
 
 ### sähkömittari client ###
 if [[ "$sahkomittari_type" == "client" ]]; then
-    echo sähkömittari client otetaan yhteys kohteeseen $sahkomittari_host  >>/tmp/autoexec.txt
-    /opt/konttiraspi/sahkomittari-client/raspisahkomittari.py &
+    echo "* sahkomittari  client up" | ts '[%Y-%m-%d %H:%M:%S autoexec       ]' >>$LOKITIEDOSTO &
+    /opt/konttiraspi/sahkomittari-client/raspisahkomittari.py 2>&1 |ts '[%Y-%m-%d %H:%M:%S sm-client      ]' >>$LOKITIEDOSTO &
 fi
 
-echo mesh-ip $mesh_ip  >>/tmp/autoexec.txt
+#batnaapuri_type=client
+### batnaapuri server ###
+if [[ "$batnaapuri_type" == "server" ]]; then
+    echo "* batnaapuri server up" | ts '[%Y-%m-%d %H:%M:%S autoexec       ]' >>$LOKITIEDOSTO &
+    /opt/konttiraspi/batnaapuri-server/batnaapuri-server.py 2>&1 |ts '[%Y-%m-%d %H:%M:%S bn-server      ]' >>$LOKITIEDOSTO &
+fi
+
+### batnaapuri client ###
+if [[ "$batnaapuri_type" == "client" ]]; then
+    echo "* batnaapuri  client up" | ts '[%Y-%m-%d %H:%M:%S autoexec       ]' >>$LOKITIEDOSTO &
+    /opt/konttiraspi/batnaapuri-client/batnaapuri-client.py 2>&1 |ts '[%Y-%m-%d %H:%M:%S bn-client      ]' >>$LOKITIEDOSTO &
+fi
+
 
 while true; do #Tarkistetaan päivitykset palvelimelta
     hh=$(date +%H)

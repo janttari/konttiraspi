@@ -1,8 +1,20 @@
 #!/bin/bash
 
-##sharutils asennettu?
-shar=$(sudo dpkg-query -l |grep sharutils)
-if [[ ${#shar} == 0 ]];then echo Asennetaan sharutils && sudo apt update && sudo apt install -y sharutils; fi
+### varmistetaan onko tarpeelliset paketit asennettu ###
+paketit=(sharutils moreutils)
+asennetut=$(sudo dpkg-query -l)
+asennettavat=""
+for paketti in "${paketit[@]}";do
+    asennettu=$(echo $asennetut |grep "${paketti}")
+    if [[ ${#asennettu} == 0 ]];then
+        echo asennetaan paketti $paketti
+        asennettavat="$asennettavat $paketti"
+    fi
+done
+if [[ ${#asennettavat} != 0 ]];then
+    sudo apt update
+    sudo apt install -y $asennettavat
+fi
 
 ##tarkastetaan jo asennetut ominaisuudet:
 k1=$(sudo dpkg-query -l |grep konttiraspi-mesh-client)
