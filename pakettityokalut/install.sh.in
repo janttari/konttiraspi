@@ -17,21 +17,16 @@ function untar_payload()
         fi
 }
 #### onko tarpeelliset paketit asennettu jo? ###
-### varmistetaan onko tarpeelliset paketit asennettu ###
 paketit=(moreutils sharutils dialog)
-asennetut=$(sudo dpkg-query -l)
-asennettavat=""
+sudo apt update
 for paketti in "${paketit[@]}";do
-    asennettu=$(echo $asennetut |grep "${paketti}")
-    if [[ ${#asennettu} == 0 ]];then
-        echo asennetaan paketti $paketti
-        asennettavat="$asennettavat $paketti"
+    echo $paketti
+    asennettu=$(dpkg -l "$paketti" |tail -n 1 |grep "^un")
+    if [[ ${#asennettu} != 0 ]];then
+        echo Asennetaan paketti $paketti
+        sudo apt install -y $paketti
     fi
 done
-if [[ ${#asennettavat} != 0 ]];then
-    sudo apt update
-    sudo apt install -y $asennettavat
-fi
 
 untar_payload
 cd $hakemisto/deb
