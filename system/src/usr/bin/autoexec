@@ -18,7 +18,7 @@ fi
 ### mesh gateway ###
 if [[ "$mesh_type" == "gateway" ]]; then
     echo "* mesh  gateway up" | ts '[%Y-%m-%d %H:%M:%S autoexec       ]' >>$LOKITIEDOSTO &
-    /opt/konttiraspi/mesh-gateway/meshgateway 2>&1 |ts '[%Y-%m-%d %H:%M:%S mesh-gateway   ]' >>$LOKITIEDOSTO &
+    /opt/konttiraspi/mesh-gateway/meshgateway up 2>&1 |ts '[%Y-%m-%d %H:%M:%S mesh-gateway   ]' >>$LOKITIEDOSTO &
 fi
 
 ### sähkömittari server ###
