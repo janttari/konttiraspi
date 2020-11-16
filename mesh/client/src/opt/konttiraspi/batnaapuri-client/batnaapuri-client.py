@@ -27,16 +27,17 @@ class WsAsiakas:
         self.t=threading.Thread(target=self.wsYhteys)
         self.t.start()
     def wsYhteys(self):
+        self.sio=socketio.Client()
         while not self.socketOK:
             print("yhdistetään batnaapurit-serverille")
             try:
-                self.sio=socketio.Client()
                 self.sio.connect(config.get("batnaapuri_server"),namespaces=['/meshraspi'])
-                self.socketOK=True
-            except:
-                print("ERR socketio", flush=True)
-                self.socketOK=False
+            except socketio.exceptions.ConnectionError as err:
+                print("ERR socketio ", err, flush=True)
                 time.sleep(5)
+            else:
+                print("socketio conn ok")
+                self.socketOK=True
         @self.sio.on('connect_error')
         def connect_error(message):
             print('Connection was rejected due to ' + message)
