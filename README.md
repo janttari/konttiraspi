@@ -15,7 +15,12 @@ Valitse asennettavat palvelut:
 
 ## Päivittäminen:  
 Lataa uusi **asenna_konttiraspi** muistikortin /boot osiolle.  
+Lataaminen päätteessä:
   
+    rm asenna_konttiraspi #Poista vanha tiedosto jos sellainen on.  
+    wget https://raw.githubusercontent.com/janttari/konttiraspi/main/asenna_konttiraspi  
+  
+
 Jos haluat muuttaa asennuksen ominaisuuksia (valikot):  
 
     cd /boot    
