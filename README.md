@@ -14,14 +14,16 @@ Valitse asennettavat palvelut:
 
 
 ## Päivittäminen:  
-Lataa uusi asenna_konttiraspi muistikortin /boot osiolle.  
+Lataa uusi **asenna_konttiraspi* muistikortin /boot osiolle.  
   
 Jos haluat muuttaa asennuksen ominaisuuksia (valikot):  
-  
+
+    cd /boot    
     ./asenna_konttiraspi
   
 Jos haluat vain päivittää olemassa olevat ominaisuudet (ilman valikoita):
   
+    cd /boot  
     ./asenna_konttiraspi -u
   
 Asennuksen ja päivityksen jälkeen uudelleenkäynnistys pitää tehdä:  
