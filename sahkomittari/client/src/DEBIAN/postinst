@@ -1,2 +1,2 @@
 #!/bin/bash
-sudo pip3 install adafruit-circuitpython-dht
+sudo pip3 install adafruit-circuitpython-dht websocket-client
