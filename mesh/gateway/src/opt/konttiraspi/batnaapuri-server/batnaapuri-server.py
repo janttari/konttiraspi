@@ -13,6 +13,7 @@ meshnaapuridata={} #tässä on clientien ilmoittamien naapurihavaintojen kokonai
 viimmeshnaapuridata={} #tässä on clientien ilmoittamien naapurihavaintojen kokonaisuus viimeinnen tunnettu tila vertailua varten
 MNT={} #Mac --> Nimi
 MIP={} #MAC --> IP
+
 havaintoaika={} #MAC aikaleima Laitenähty viimeksi
 
 def luoVisuaali():

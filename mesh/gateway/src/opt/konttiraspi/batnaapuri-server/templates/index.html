@@ -38,9 +38,12 @@
             socket.on('paivitakuva', function(msg, cb) {
                 console.log("päivitä kuva");
                 var timestamp = new Date().getTime();
+                var datetext = new Date().toLocaleTimeString();;
                 var image = document.getElementById("kartta"); 
                 image.src = "/static/kartta.png?t=" + timestamp; 
-                console.log(image.src); 
+                console.log(image.src);
+                document.getElementById("kello").innerHTML=datetext;
+                //$('#log').append('<br>' + $('<div/>').text('datetext+' '+Päivitä ' + image.src).html()); 
             
             });
 
@@ -102,6 +105,7 @@
     </script>
 </head>
 <body>
+    <div id="kello">--:--:--</div><br>
     <img src="/static/kartta.png" id="kartta">
     <h1>Flask-SocketIO Test</h1>
     <!--
@@ -136,8 +140,7 @@
     <form id="disconnect" method="POST" action="#">
         <input type="submit" value="Disconnect">
     </form>
-    -->
     <h2>Receive:</h2>
-    <div id="log"></div>
+    <div id="log"></div> -->
 </body>
 </html>
