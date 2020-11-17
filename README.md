@@ -14,7 +14,7 @@ Valitse asennettavat palvelut:
 
 
 ## Päivittäminen:  
-Lataa uusi **asenna_konttiraspi* muistikortin /boot osiolle.  
+Lataa uusi **asenna_konttiraspi** muistikortin /boot osiolle.  
   
 Jos haluat muuttaa asennuksen ominaisuuksia (valikot):  
 
