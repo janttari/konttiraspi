@@ -30,6 +30,6 @@ done
 untar_payload
 cd $hakemisto/deb
 chmod a+x asenna
-./asenna
+./asenna $*
 exit 0
 

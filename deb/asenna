@@ -1,4 +1,14 @@
 #!/bin/bash
+#ARGUMENTIT:
+#-u päivittää ilman dialogeja säilyttäen nykyiset ominaisuudet
+#
+#
+
+##käydään komentorivi argumentit läpi:
+for var in "$@"
+do
+    if [[ "$var" == "-u" ]];then update=1;fi
+done
 
 ##tarkastetaan jo asennetut ominaisuudet:
 k1=$(sudo dpkg-query -l |grep konttiraspi-mesh-client)
@@ -10,36 +20,44 @@ if [[ ${#k3} -gt 0 ]];then k3="on"; else k3="off"; fi
 k4=$(sudo dpkg-query -l |grep konttiraspi-sahkomittari-server)
 if [[ ${#k4} -gt 0 ]];then k4="on"; else k4="off"; fi
 
+if [[ $update != 1 ]];then
+    cmd=(dialog --separate-output --checklist "valitse konttiraspi-system lisäksi asennettavat palvelut:" 22 76 16)
+    options=(1 "konttiraspi-mesh-client" $k1
+             2 "konttiraspi-mesh-gateway" $k2
+             3 "konttiraspi-sahkomittari-client" $k3
+             4 "konttiraspi-sahkomittari-server" $k4)
+    choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+    okcancel=$?
+    clear
+    if [[ $okcancel != 0 ]]; then
+        echo Peruuta
+        exit
+    fi
+    for choice in $choices
+    do
+        case $choice in
+            1)
+                a1=1
+                ;;
+            2)
+                a2=1
+                ;;
+            3)
+                a3=1
+                ;;
+            4)
+                a4=1
+                ;;
+        esac
+    done
+else #jos -u
+    if [[ "$k1" == "on" ]]; then a1=1; fi
+    if [[ "$k2" == "on" ]]; then a2=1; fi
+    if [[ "$k3" == "on" ]]; then a3=1; fi
+    if [[ "$k4" == "on" ]]; then a4=1; fi
 
-cmd=(dialog --separate-output --checklist "valitse konttiraspi-system lisäksi asennettavat palvelut:" 22 76 16)
-options=(1 "konttiraspi-mesh-client" $k1
-         2 "konttiraspi-mesh-gateway" $k2
-         3 "konttiraspi-sahkomittari-client" $k3
-         4 "konttiraspi-sahkomittari-server" $k4)
-choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
-okcancel=$?
-clear
-if [[ $okcancel != 0 ]]; then
-    echo Peruuta
-    exit
 fi
-for choice in $choices
-do
-    case $choice in
-        1)
-            a1=1
-            ;;
-        2)
-            a2=1
-            ;;
-        3)
-            a3=1
-            ;;
-        4)
-            a4=1
-            ;;
-    esac
-done
+
 echo asennetaan konttiraspi-system
 sudo dpkg -i konttiraspi-system.deb
 
@@ -98,5 +116,6 @@ if [ ! -f "/boot/asetukset.txt" ]; then
     fi
 fi
 
-dialog --msgbox "Asennus on valmis ja reboot on suositeltavaa tehdä nyt!" 22 76 && clear
-
+if [[ $update != 1 ]];then
+    dialog --msgbox "Asennus on valmis ja reboot on suositeltavaa tehdä nyt!" 22 76 && clear
+fi
