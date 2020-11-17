@@ -10,10 +10,10 @@ DEBUG=False
 kulutusTietokanta=os.getcwd()+"/opt/konttiraspi/sahkomittari-server/data/kulutus.db"
 
 viimTallennusaika="" #Tähän kirjoitetaan milloin pysyvät tiedostot on viimeksi tallennettu HH
-kwhMuisti={} # {'192.168.4.222': '0.45250'}
-pulssiMuisti={} #ip:pulssit
-lampoMuisti={} #ip:lämpötila
-kosteusMuisti={} #ip:kosteus
+kwhMuisti={} # {'fo-t-2332a': '0.45250'}
+pulssiMuisti={} #lahettaja:pulssit
+lampoMuisti={} #lahettaja:lämpötila
+kosteusMuisti={} #lahettaja:kosteus
 
 def tallennaPysyvat(): # Tallennetaan kulutuslukemat pysyvään paikalliseen tiedostoon
     aika=str(int(time.time())) #unix-aikaleima
@@ -23,52 +23,53 @@ def tallennaPysyvat(): # Tallennetaan kulutuslukemat pysyvään paikalliseen tie
     conn = sqlite3.connect("/opt/konttiraspi/sahkomittari-server/data/kulutus.db")
     c = conn.cursor()
     for asiakasID in kwhMuisti: #käydään kaikki asiakkaa läpi yksi kerrallaan #TARKISTA TÄÄ OSUUS, LASKEE VÄÄRIN?
-        kys=c.execute('SELECT kwh FROM kulutus WHERE IP="'+asiakasID+'" ORDER BY aikaleima DESC LIMIT 1') #lasketaan ensin tunnin aikana tapahtunut kulutus vertaamalla nykyistä viimeksi tietokantaan tallennettuun lukemaan
+        kys=c.execute('SELECT kwh FROM kulutus WHERE ID="'+asiakasID+'" ORDER BY aikaleima DESC LIMIT 1') #lasketaan ensin tunnin aikana tapahtunut kulutus vertaamalla nykyistä viimeksi tietokantaan tallennettuun lukemaan
         edtunti=None
         for i in kys:
             edtunti=str(i[0])
         if edtunti is None: #tietokannassa ei vielä ole kulutustietoa...
             edtunti=float(kwhMuisti[asiakasID]) #...joten kaikki kulutus on tälle tunnille
         tuntikohtainen=str(float(kwhMuisti[asiakasID])-float(edtunti))
-        c.execute('INSERT into kulutus(aikaleima, ip, kwh, pulssit, tuntikohtainen, lampo, kosteus, ulkolampo, ulkokosteus) VALUES("'+aika+'", "'+asiakasID+'", '+str(kwhMuisti[asiakasID])+', '+str(pulssiMuisti[asiakasID])+', '+str(tuntikohtainen)+', '+str(lampoMuisti[asiakasID])+', '+str(kosteusMuisti[asiakasID])+', '+str(ulkolampo)+', '+str(ulkokosteus)+')')
+        c.execute('INSERT into kulutus(aikaleima, lahettaja, kwh, pulssit, tuntikohtainen, lampo, kosteus, ulkolampo, ulkokosteus) VALUES("'+aika+'", "'+asiakasID+'", '+str(kwhMuisti[asiakasID])+', '+str(pulssiMuisti[asiakasID])+', '+str(tuntikohtainen)+', '+str(lampoMuisti[asiakasID])+', '+str(kosteusMuisti[asiakasID])+', '+str(ulkolampo)+', '+str(ulkokosteus)+')')
     conn.commit()
     conn.close()
 #---------------------------------------------------------------------------------------------------------------------------------------------
 def selainWscallback(client, server, data): #Internet-selaimella annetaan komentoja
-    ip = client["address"][0]
+    #ip = client["address"][0]
     jdata=json.loads(data)
     if "komento" in jdata:
-        kohdeip=jdata["komento"]["laite"]
+        kohdelaite=jdata["komento"]["laite"]
         tavu=jdata["komento"]["tavu"]
-        relerivi='{"komento": {"laite": "'+kohdeip+'", "tavu": "'+tavu+'"}}'
-        mittariWs.lahetaYksityinen(kohdeip, relerivi)
+        relerivi='{"komento": {"laite": "'+kohdelaite+'", "tavu": "'+tavu+'"}}'
+        mittariWs.lahetaYksityinen(kohdelaite, relerivi)
 
 def mittariWscallback(client, server, data): #Raspberry lähettää mittarin lukemia
-    ip = client["address"][0]
+    #ip = client["address"][0]
     jsmessage=json.loads(data)
     if "raspilta" in jsmessage:
-        jsmessage=jsmessage["raspilta"]
+        lahettaja=next(iter(jsmessage['raspilta'].keys()))
+        jsmessage=jsmessage["raspilta"][lahettaja]
         aika=datetime.now().strftime("%H:%M:%S")
         riviselaimille='{"elementit": ['
-        riviselaimille+='{"elementti": "nahty_'+ip+'", "arvo": "'+aika+'"}, '
+        riviselaimille+='{"elementti": "nahty_'+lahettaja+'", "arvo": "'+aika+'"}, '
         if "info" in jsmessage:
             info=jsmessage.get("info", "-")
-            riviselaimille+='{"elementti": "info_'+ip+'", "arvo": "'+info+'"}, '
+            riviselaimille+='{"elementti": "info_'+lahettaja+'", "arvo": "'+info+'"}, '
         if "kwh" in jsmessage:
-            kwhMuisti[ip]=jsmessage["kwh"]
-            riviselaimille+='{"elementti": "kwh_'+ip+'", "arvo": "'+kwhMuisti[ip]+'"}, '
+            kwhMuisti[lahettaja]=jsmessage["kwh"]
+            riviselaimille+='{"elementti": "kwh_'+lahettaja+'", "arvo": "'+kwhMuisti[lahettaja]+'"}, '
         if "pulssit" in jsmessage:
-            pulssiMuisti[ip]=jsmessage.get("pulssit", "-")
-            riviselaimille+='{"elementti": "pulssit_'+ip+'", "arvo": "'+pulssiMuisti[ip]+'"}, '
+            pulssiMuisti[lahettaja]=jsmessage.get("pulssit", "-")
+            riviselaimille+='{"elementti": "pulssit_'+lahettaja+'", "arvo": "'+pulssiMuisti[lahettaja]+'"}, '
         if "reaaliaikainen" in jsmessage:
             reaaliaikainen=jsmessage.get("reaaliaikainen", "-")
-            riviselaimille+='{"elementti": "reaali_'+ip+'", "arvo": "'+reaaliaikainen+'"}, '
+            riviselaimille+='{"elementti": "reaali_'+lahettaja+'", "arvo": "'+reaaliaikainen+'"}, '
         if "lampo" in jsmessage:
-            lampoMuisti[ip]=jsmessage.get("lampo", "-")
-            riviselaimille+='{"elementti": "lampo_'+ip+'", "arvo": "'+lampoMuisti[ip]+'"}, '
+            lampoMuisti[lahettaja]=jsmessage.get("lampo", "-")
+            riviselaimille+='{"elementti": "lampo_'+lahettaja+'", "arvo": "'+lampoMuisti[lahettaja]+'"}, '
         if "kosteus" in jsmessage:
-            kosteusMuisti[ip]=jsmessage.get("kosteus", "-")
-            riviselaimille+='{"elementti": "kosteus_'+ip+'", "arvo": "'+kosteusMuisti[ip]+'"}, '
+            kosteusMuisti[lahettaja]=jsmessage.get("kosteus", "-")
+            riviselaimille+='{"elementti": "kosteus_'+lahettaja+'", "arvo": "'+kosteusMuisti[lahettaja]+'"}, '
         riviselaimille=riviselaimille[:-2] #viimeinen pilkku ja välilyönti pois
         riviselaimille+=']}'
         selainWs.lahetaKaikille(riviselaimille)
@@ -80,7 +81,7 @@ if __name__ == "__main__":    # PÄÄOHJELMA ALKAA
 
     conn = sqlite3.connect("/opt/konttiraspi/sahkomittari-server/data/kulutus.db")
     c = conn.cursor()
-    c.execute('CREATE TABLE IF NOT EXISTS kulutus (aikaleima DATE, ip TEXT , kwh REAL, pulssit INTEGER, tuntikohtainen REAL, lampo REAL, kosteus REAL, ulkolampo REAL, ulkokosteus REAL)')
+    c.execute('CREATE TABLE IF NOT EXISTS kulutus (aikaleima DATE, id TEXT , kwh REAL, pulssit INTEGER, tuntikohtainen REAL, lampo REAL, kosteus REAL, ulkolampo REAL, ulkokosteus REAL)')
     conn.commit()
     conn.close()
     kierros=0

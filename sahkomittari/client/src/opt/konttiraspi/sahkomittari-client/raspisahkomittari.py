@@ -120,6 +120,7 @@ class WsAsiakas(): #------------------------------------------------------------
             mittari.lahetaSarjaporttiin(tavu)
 
     def on_error(self, error):
+        print("SOCK ERR", error, flush=True)
         pass
 
     def on_close(self, ws):
@@ -142,8 +143,7 @@ class WsAsiakas(): #------------------------------------------------------------
 #------------------------------------------------------------------------------------------------------------------------------------
 
 def lahetaWsServerille(data): #Tämä kutsutaan kun pulssien saatu
-    print('{"raspilta": {"'+config.get('mesh_name')+'": {'+data+'}}')
-    wsAsiakas.lahetaWs('{"raspilta": '+data+'}') #!!! MUUTA TÄÄ NIIN ETTÄ KERROTAAN OMA NIMI
+    wsAsiakas.lahetaWs('{"raspilta": {"'+config.get('mesh_name')+'": '+data+'}}') #!!! MUUTA TÄÄ NIIN ETTÄ KERROTAAN OMA NIMI
 
 def tallennaPulssi(): # Tallentaa pulssilukeman pysyväksi
     #lokita("tallenapulssi pysyvään tiedostoon. lukema on nyt:"+str(mittari.getPulssilukema()))
