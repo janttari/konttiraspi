@@ -89,7 +89,7 @@ class Mittaaja(): # TÄMÄ LUOKKA HOITAA VARSINAISEN PINNIN LUKEMISEN JA KULUTUK
         tmpKwh="{:.5f}".format(pulssienMaara*1000/self.imp/1000) #kokonaiskulutus kwh
         tmpReaaliaikainen="{:.5f}".format(((1000/self.imp*3600)/pulssienVali)/1000) #kulutusta on tällä hetkellä kW
         #pääohjelman callback 'lahetaWsServerille' hoitaa varsinaisen lähetyksen websocketilla:
-        rivi='{"kwh": "'+tmpKwh+'", "pulssit": "'+str(pulssienMaara)+'", "reaaliaikainen": "'+tmpReaaliaikainen+'", "info": "'+tyyppi+'"}'
+        rivi='{"'+config.get('mesh_name')+'": {"kwh": "'+tmpKwh+'", "pulssit": "'+str(pulssienMaara)+'", "reaaliaikainen": "'+tmpReaaliaikainen+'", "info": "'+tyyppi+'"}}'
         self.callback(rivi)
 
     def setPulssilukema(self, lukema): #Voidaan asettaa pulssien määrä
@@ -142,6 +142,7 @@ class WsAsiakas(): #------------------------------------------------------------
 #------------------------------------------------------------------------------------------------------------------------------------
 
 def lahetaWsServerille(data): #Tämä kutsutaan kun pulssien saatu
+    print('{"raspilta": '+data+'}')
     wsAsiakas.lahetaWs('{"raspilta": '+data+'}') #!!! MUUTA TÄÄ NIIN ETTÄ KERROTAAN OMA NIMI
 
 def tallennaPulssi(): # Tallentaa pulssilukeman pysyväksi
