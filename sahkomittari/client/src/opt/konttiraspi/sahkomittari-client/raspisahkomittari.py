@@ -100,6 +100,7 @@ class Mittaaja(): # TÄMÄ LUOKKA HOITAA VARSINAISEN PINNIN LUKEMISEN JA KULUTUK
 
 class WsAsiakas(): #-----------------------------------------------------------------------------------------------------
     def __init__(self):
+        self.socketok=False
         self.palvelin=config.get('sm_host')
         self.t=threading.Thread(target=self.wsYhteys)
         self.t.start()
@@ -120,6 +121,7 @@ class WsAsiakas(): #------------------------------------------------------------
             mittari.lahetaSarjaporttiin(tavu)
 
     def on_error(self, error):
+        self.socketok=False
         print("SOCK ERR", error, flush=True)
         pass
 
@@ -127,6 +129,8 @@ class WsAsiakas(): #------------------------------------------------------------
         pass
 
     def on_open(self):
+        self.socketok=True
+        print("SOCK OPEN")
         pass
 
     def lahetaWs(self, sanoma):
@@ -136,8 +140,9 @@ class WsAsiakas(): #------------------------------------------------------------
             self.reconnect() #Pyydetään avaamaan ws uudelleen
 
     def reconnect(self): #avaa ws uudelleen
+        print("SOCKET RECONN", flush=True)
         self.t.join()
-        time.sleep(1)
+        time.sleep(10)
         self.t=threading.Thread(target=self.wsYhteys)
         self.t.start()
 #------------------------------------------------------------------------------------------------------------------------------------

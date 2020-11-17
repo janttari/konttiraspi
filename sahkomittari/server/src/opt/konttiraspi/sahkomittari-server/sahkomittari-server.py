@@ -37,6 +37,7 @@ def tallennaPysyvat(): # Tallennetaan kulutuslukemat pysyvään paikalliseen tie
 def selainWscallback(client, server, data): #Internet-selaimella annetaan komentoja
     #ip = client["address"][0]
     jdata=json.loads(data)
+    #print(jdata)
     if "komento" in jdata:
         kohdelaite=jdata["komento"]["laite"]
         tavu=jdata["komento"]["tavu"]
@@ -46,6 +47,7 @@ def selainWscallback(client, server, data): #Internet-selaimella annetaan koment
 def mittariWscallback(client, server, data): #Raspberry lähettää mittarin lukemia
     #ip = client["address"][0]
     jsmessage=json.loads(data)
+    #print(jsmessage, flush=True)
     if "raspilta" in jsmessage:
         lahettaja=next(iter(jsmessage['raspilta'].keys()))
         jsmessage=jsmessage["raspilta"][lahettaja]
