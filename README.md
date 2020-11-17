@@ -41,3 +41,7 @@ Kaikki asetukset on tiedostossa **/boot/asetukset.txt**
 Tarkista ne huolellisesti.  
   
 
+-------
+HUOM! Yhteyksien luominen käynnistyksen jälkeen ja yhteyden katkettua voi kestää useamman minuutin!  
+  
+
