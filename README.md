@@ -37,7 +37,7 @@ Asennuksen ja päivityksen jälkeen uudelleenkäynnistys pitää tehdä:
     sudo reboot
   
 ## Asetukset:
-Kaikki asetukset on tiedostossa **/boot/asetukset.txt**  
+Kaikki asetukset on tiedostossa **[/boot/asetukset.txt](deb/asetukset.txt)**    
 Tarkista ne huolellisesti.  
   
 
