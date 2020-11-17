@@ -48,9 +48,19 @@ HUOM! Yhteyksien luominen käynnistyksen jälkeen ja yhteyden katkettua voi kest
 -------
 
 **konttiraspi-system** sisältää perustoiminnot. Asennetaan kaikkiin Raspeihin.  
+  
 **konttiraspi-mesh-client** sisältää mesh-client ja batnaapurit-client.  
-**konttiraspi-mesh-gateway**  sisältää mesh-gateway ja batnaapurit-server.  
-**konttiraspi-sahkomittari-client**  sähkömittareja lukeville Raspeille. Lukee sarjaportista Arduinon datan ja lähettää sen sahkomittari-serverille  
+-mesh-client toimii mesh-verkon asiakkaana ja ottaa yhteyden gateway-raspiin (ja sitä kautta internetiin)    
+-batnaapurit-client ilmoittaa näkemistään mesh-verkon laitteista serverille
+  
+**konttiraspi-mesh-gateway**  sisältää mesh-gateway ja batnaapurit-server  
+-mesh-gateway toimii mesh-verkon gatewayna  
+-batnaapurit-server pitää kirjaa mesh-verkon laitteista ja palvelee selainta portissa 8000  
+  
+  
+**konttiraspi-sahkomittari-client**  
+-sähkömittareja lukeville Raspeille. Lukee sarjaportista Arduinon datan ja lähettää sen sahkomittari-serverille  
+  
 **konttiraspi-sahkomittari-server**  
-
+-palvelee selainta portissa 80
 
