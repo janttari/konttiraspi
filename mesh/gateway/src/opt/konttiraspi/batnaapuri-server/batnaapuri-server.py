@@ -19,13 +19,21 @@ def luoVisuaali():
     G = nx.Graph()
     #print("luovisuaali", meshnaapuridata, flush=True)
     for isan in meshnaapuridata: #käydään isäntien naapurit läpi
+        if isan in MNT:
+            isannimi=MNT[isan][-6:]
+        else:
+            isannimi=isan[-5:]
         for naap in meshnaapuridata[isan]["naapurit"]:
             naapuri=naap["laite"]
+            if naapuri in MNT:
+                naapurinimi=MNT[naapuri][-6:]
+            else:
+                naapurinimi=naapuri[-5:]
             #if naapuri=='':
             #    break
             teho=naap["teho"]
             #print(teho)
-            G.add_edge(isan[-5:], naapuri[-5:], valimatka=int(40-float(teho)))
+            G.add_edge(isannimi, naapurinimi, valimatka=int(40-float(teho)))
     pos = nx.spring_layout(G, seed=0)
     plt.figure(figsize=(9, 9))
     nx.draw(G, pos,with_labels = True, node_color ='blue', node_size=3000, font_size=8, font_color="yellow")
