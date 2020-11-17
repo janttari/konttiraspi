@@ -1,4 +1,5 @@
 #!/bin/bash
+sudo chmod -R 777 /opt/konttiraspi/sahkomittari-server/data/ #tietokannan koko hakemistolla pitää olla oikeudet, muuten php-sqlite3 vittuilee
 tee /etc/nginx/sites-available/default >/dev/null<< END
 server {
     listen 80 default_server;
