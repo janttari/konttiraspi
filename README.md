@@ -28,3 +28,8 @@ Asennuksen ja päivityksen jälkeen uudelleenkäynnistys pitää tehdä:
   
     sudo reboot
   
+## Asetukset:
+Kaikki asetukset on tiedostossa **/boot/asetukset.txt**  
+Tarkista ne huolellisesti.  
+  
+
