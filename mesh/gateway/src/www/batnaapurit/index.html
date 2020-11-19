@@ -7,6 +7,14 @@
         var socketUrl = 'ws://'+location.hostname+":8090";
         var ws = new  WebSocket(socketUrl);
 
+            ws.onclose = function(event){
+                document.getElementById("kello").innerHTML="SOCKET ERR!";
+            }
+
+            ws.onopen = function(event){
+                document.getElementById("kello").innerHTML="SOCKET OK";
+            }
+
             ws.onmessage = function(event) {
                 console.log(event.data);
                 if(event.data=="paivitakuva"){
