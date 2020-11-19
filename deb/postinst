@@ -41,11 +41,8 @@ if [ -f "/boot/asetukset.txt" ]; then
     if [[ "$KORVAA" == "k" ]]; then
         konffi
     fi
-else 
+else
     echo Luodaan asetustiedosto
     konffi
 fi
-
-
-
 

@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-from flask_socketio import SocketIO, emit
-from flask import Flask, render_template, url_for, copy_current_request_context, request
-from engineio.payload import Payload
-import time, threading, logging, sys, matplotlib, json, os
+from websocket_server import WebsocketServer
+from palveluws import PalveluWs #Websocket-palvelut
+from datetime import datetime
+import time, sys, os, json #, logging, threading,logging, urllib.parse
+from configobj import ConfigObj
 import networkx as nx #emuloi kontti-raspberryjen MESH-verkkoa jossa raspit raportoi naapuri laitteistaan tälle serverille
 import matplotlib.pyplot as plt
-from configobj import ConfigObj
-Payload.max_decode_packets = 500
+#DEBUG=False
 
 config=ConfigObj('/boot/asetukset.txt')
 skriptinHakemisto=os.path.dirname(os.path.realpath(__file__))
@@ -42,11 +42,12 @@ def luoVisuaali():
     nx.draw(G, pos,with_labels = True, node_color ='blue', node_size=3000, font_size=8, font_color="yellow")
     edge_labels = nx.get_edge_attributes(G,'valimatka')
     nx.draw_networkx_edge_labels(G, pos, edge_labels = edge_labels)
-    plt.savefig(skriptinHakemisto+'/static/kartta.png')
+    plt.savefig('/www/batnaapurit/kartta.png')
     #plt.clf()
     #plt.cla()
     plt.close()
-    f.paivitaKuva()
+    selainWs.lahetaKaikille("paivitakuva")
+    #self.socketio.emit('paivitakuva', {'data': 0}, namespace='/selain') #kaikille namespacessa
 
 def vertaaNaapuriMuutoksia(): #onko naapuridatassa tapahtunut muutoksia?
     global viimmeshnaapuridata
@@ -63,80 +64,6 @@ def vertaaNaapuriMuutoksia(): #onko naapuridatassa tapahtunut muutoksia?
         viimmeshnaapuridata=meshnaapuridata.copy()
         luoVisuaali()
 
-class FlaskPalvelu:
-    def __init__(self):
-        #self.clientsMeshraspi=[]
-        #self.clientsSelain=[]
-        self.app = Flask(__name__)
-        self.app.logger.disabled = True #hide flask messages
-        log = logging.getLogger('werkzeug') #hide flask messages
-        log.disabled = True #hide flask messages
-        cli = sys.modules['flask.cli'] #hide flask messages
-        cli.show_server_banner = lambda *x: None #hide flask messages
-        self.app.config['SECRET_KEY'] = 'secret!'
-        self.app.config['DEBUG'] = False
-        self.socketio = SocketIO(self.app, async_mode='threading', logger=False, engineio_logger=False)
-        fp=threading.Thread(target=self.palv)
-        fp.start()
-
-        @self.app.route('/')
-        def index():
-            return render_template('index.html')
-
-        @self.socketio.on('connect', namespace='/selain')
-        def selain_connect():
-            pass
-            #self.clientsSelain.append(request.sid)
-
-        @self.socketio.on('connect', namespace='/meshraspi')
-        def meshraspi_connect():
-            pass
-            #self.clientsMeshraspi.append(request.sid)
-
-        @self.socketio.on('disconnect', namespace='/meshraspi')
-        def test_disconnect():
-            pass
-            #print('Client disconnected')
-
-        @self.socketio.on('naapuri_message', namespace='/meshraspi') #client lähettää tietoa naapureistaan
-        def __receiv_message(data):
-            jdata=json.loads(data)
-            print(jdata)
-            isantaNimi=jdata["laite"]
-            isantaIP=jdata["ip"]
-            isantaMAC=jdata["mac"]
-            MNT[isantaMAC]=isantaNimi #päivitetään nimet
-            MIP[isantaMAC]=isantaIP
-            havaintoaika[isantaMAC]=time.time()
-            naap=[]
-            for j in jdata["data"]:
-                nmac=j["mac"]
-                nteho=j["teho"]
-                nviive=j["viive"]
-                kohde={"laite": nmac, "teho": nteho, "viive": nviive}
-                naap.append(kohde)
-            meshnaapuridata[isantaMAC]={"naapurit": naap}
-            vertaaNaapuriMuutoksia()
-
-        @self.socketio.on('selainmsg', namespace='/selain') #selaimelta tulevia komentoja
-        def __receiv_message(data):
-            print("SSS",data, flush=True)
-
-    def lahetaMeshraspi(self,number):
-        #for cl in self.clients:
-            #self.socketio.emit('newnumber', {'number': cl}, room=cl, namespace='/meshraspi') #vain pyytäjälle
-        self.socketio.emit('newnumber', {'number': number}, namespace='/meshraspi') #kaikille namespacessa
-
-    def lahetaSelain(self,number):
-        self.socketio.emit('naapuridata', {'data': number}, namespace='/selain') #kaikille namespacessa
-
-    def paivitaKuva(self):
-        #print("päivitä selaimen kuva")
-        self.socketio.emit('paivitakuva', {'data': 0}, namespace='/selain') #kaikille namespacessa
-
-    def palv(self):
-        self.socketio.run(self.app, host='0.0.0.0', port=int(config.get("batnaapuri_portti")))
-
 def tarkistaKadonneet(): # käydään läpi laitteiden viimeiset havaintoajat
     for laite in list(MNT):
         nahtyViimeksi=time.time()-havaintoaika[laite]
@@ -147,8 +74,32 @@ def tarkistaKadonneet(): # käydään läpi laitteiden viimeiset havaintoajat
             luoVisuaali()
         #print("MNT: ",laite, havaintoaika[laite])
 
+def selainWscallback(client, server, data): #Internet-selaimella annetaan komentoja
+    pass
+
+def batWscallback(client, server, data): #Raspberry lähettää batnaapureita
+    print(data)
+    jdata=json.loads(data)
+    print(jdata)
+    isantaNimi=jdata["laite"]
+    isantaIP=jdata["ip"]
+    isantaMAC=jdata["mac"]
+    MNT[isantaMAC]=isantaNimi #päivitetään nimet
+    MIP[isantaMAC]=isantaIP
+    havaintoaika[isantaMAC]=time.time()
+    naap=[]
+    for j in jdata["data"]:
+        nmac=j["mac"]
+        nteho=j["teho"]
+        nviive=j["viive"]
+        kohde={"laite": nmac, "teho": nteho, "viive": nviive}
+        naap.append(kohde)
+    meshnaapuridata[isantaMAC]={"naapurit": naap}
+    vertaaNaapuriMuutoksia()
+
 if __name__ == '__main__':
-    f=FlaskPalvelu()
+    selainWs=PalveluWs(8090, selainWscallback) #websocket-palvelin selaimille
+    batWs=PalveluWs(int(config.get("batnaapuri_portti")), batWscallback) #websocket-palvelin raspien batnaapureille
     num=0
     while True:
         num+=1

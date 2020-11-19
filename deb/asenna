@@ -78,6 +78,7 @@ else
     if [[ "$k2" == "on" ]]; then
         echo poistetaan konttiraspi-mesh-gateway
         sudo dpkg -r konttiraspi-mesh-gateway
+        nginx=1
     fi
 fi
 
@@ -95,6 +96,7 @@ fi
 if [[ $a4 == 1 ]]; then
     echo asennetaan konttiraspi-sahkomittari-server
     sudo dpkg -i konttiraspi-sahkomittari-server.deb
+    nginx=1
 else
     if [[ "$k4" == "on" ]]; then
         echo poistetaan konttiraspi-sahkomittari-server
@@ -116,6 +118,13 @@ if [ ! -f "/boot/asetukset.txt" ]; then
     fi
 fi
 
-if [[ $update != 1 ]];then
+### nginx conffi jo tarpeellista ####
+if [[ $nginx == 1 ]]; then
+    sudo cp nginx.txt /etc/nginx/sites-available/default
+fi
+
+
+### reboot pyyntö ###
+if [[ $update != 1 ]]; then
     dialog --msgbox "Asennus on valmis ja reboot on suositeltavaa tehdä nyt!" 22 76 && clear
 fi

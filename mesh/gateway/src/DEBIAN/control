@@ -3,7 +3,7 @@ Version: 0.02
 Section: misc                                                                                            
 Priority: optional                                                                                       
 Architecture: all
-Depends: konttiraspi-system
+Depends: konttiraspi-system | php7.3-fpm | php7.3 | fcgiwrap | php-sqlite3
 Maintainer: Jani Janttari <janttari@yandex.ru>
 Description:
  -

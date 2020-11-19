@@ -22,12 +22,12 @@ mesh_mtu=1500 # *MC *MG
 
 ## batnaapuri-asetukset *Client *Server
 batnaapuri_type=server #client|server # *BC *BS
-batnaapuri_server=http://192.168.234.1:8000 #batnaapuri-palvelin *BC
+batnaapuri_server=ws://192.168.234.1:8000 #batnaapuri-palvelin *BC
 batnaapuri_portti=8000 #palvellaan batnaapuri-serveriä tässä portissa *BS
 
 ## Sähkömittari-asetukset *Client *Server
 sm_type=client #server|client *SS *SC
-sm_host=palvelin=ws://192.168.4.222:8888/ #Otetaan yhteyttä tähän sähkömittari-palvelimeen *SC
+sm_host=palvelin=ws://192.168.4.222:8888 #Otetaan yhteyttä tähän sähkömittari-palvelimeen *SC
 sm_serial=/dev/ttyUSB0 #sarjaportti jossa arduino kiinni *SC
 sm_imp=1000 #sahkomittari antaa impulsseja per kwh *SC
 sm_pulssipysyva=/opt/konttiraspi/sahkomittari-client/pulssi #Tähän tiedostoon tallennetaan pysyvä pulssilukema *SC
