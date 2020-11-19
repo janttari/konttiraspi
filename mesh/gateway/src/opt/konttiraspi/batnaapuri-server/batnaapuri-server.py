@@ -87,9 +87,9 @@ def selainWscallback(client, server, data): #Internet-selaimella annetaan koment
     pass
 
 def batWscallback(client, server, data): #Raspberry lähettää batnaapureita
-    print(data)
+    #print(data)
     jdata=json.loads(data)
-    print(jdata)
+    #print(jdata)
     isantaNimi=jdata["laite"]
     isantaIP=jdata["ip"]
     isantaMAC=jdata["mac"]

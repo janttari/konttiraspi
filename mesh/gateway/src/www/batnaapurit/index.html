@@ -4,35 +4,48 @@
     <title>Batnaapurit</title>
     <script type="text/javascript" charset="utf-8">
 
-        var socketUrl = 'ws://'+location.hostname+":8090";
-        var ws = new  WebSocket(socketUrl);
+function connect() {
+    var socketUrl = 'ws://'+location.hostname+":8090";
+    var ws = new WebSocket(socketUrl);
+    ws.onopen = function() {
+        console.log("OPEN");
+        document.getElementById("kello").innerHTML="Yhdistetty";
+    };
 
-            ws.onclose = function(event){
-                document.getElementById("kello").innerHTML="SOCKET ERR!";
-            }
+    ws.onmessage = function(e) {
+        console.log('Message:', e.data);
+        if(e.data=="paivitakuva"){
+            paivitakuva();
+        };
 
-            ws.onopen = function(event){
-                document.getElementById("kello").innerHTML="SOCKET OK";
-            }
+    };
 
-            ws.onmessage = function(event) {
-                console.log(event.data);
-                if(event.data=="paivitakuva"){
-                    paivitakuva();
-                }
-            }
-            function paivitakuva() {
-                console.log("refresh image");
-                var timestamp = new Date().getTime();
-                var datetext = new Date().toLocaleTimeString();;
-                var image = document.getElementById("kartta"); 
-                image.src = "kartta.png?t=" + timestamp; 
-                console.log(image.src);
-                document.getElementById("kello").innerHTML=datetext;
-                //$('#log').append('<br>' + $('<div/>').text('datetext+' '+Päivitä ' + image.src).html()); 
-            
-            }
+    ws.onclose = function(e) {
+        console.log('Socket is closed. Reconnect will be attempted in 1 second.', e.reason);
+        document.getElementById("kello").innerHTML="Katkaistu";
+            setTimeout(function() {
+                connect();
+            }, 1000);
+        };
 
+    ws.onerror = function(err) {
+        console.error('Socket encountered error: ', err.message, 'Closing socket');
+        ws.close();
+    };
+}
+
+
+function paivitakuva() {
+    console.log("refresh image");
+    var timestamp = new Date().getTime();
+    var datetext = new Date().toLocaleTimeString();;
+    var image = document.getElementById("kartta"); 
+    image.src = "kartta.png?t=" + timestamp; 
+    console.log(image.src);
+    document.getElementById("kello").innerHTML=datetext;
+};
+
+connect();
     </script>
 </head>
 <body>
