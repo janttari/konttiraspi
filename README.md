@@ -55,14 +55,14 @@ HUOM! Yhteyksien luominen käynnistyksen jälkeen ja yhteyden katkettua voi kest
   
 **konttiraspi-mesh-gateway**  sisältää mesh-gateway ja batnaapurit-server  
 * mesh-gateway toimii mesh-verkon gatewayna  
-* batnaapurit-server pitää kirjaa mesh-verkon laitteista ja palvelee selainta portissa 8000  
+* batnaapurit-server pitää kirjaa mesh-verkon laitteista ja ws palvelee selainta portissa 8090    
   
   
 **konttiraspi-sahkomittari-client**  
 * sähkömittareja lukeville Raspeille. Lukee sarjaportista Arduinon datan ja lähettää sen sahkomittari-serverille  
   
 **konttiraspi-sahkomittari-server**  
-* palvelee selainta portissa 80
+* ws palvelee selainta portissa 8889  
 
 
 -------
