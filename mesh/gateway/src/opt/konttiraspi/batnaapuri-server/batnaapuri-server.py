@@ -52,17 +52,26 @@ def luoVisuaali():
 def vertaaNaapuriMuutoksia(): #onko naapuridatassa tapahtunut muutoksia?
     global viimmeshnaapuridata
     muuttunut=False
-    for isanta in meshnaapuridata:
-        for naapurit in meshnaapuridata[isanta]["naapurit"]:
-            if isanta in viimmeshnaapuridata:
-                vanhat=viimmeshnaapuridata[isanta]["naapurit"]
-                if meshnaapuridata[isanta]["naapurit"] != vanhat:
-                    muuttunut=True
-            else:
-                muuttunut=True
+    isanta=lahettaja=next(iter(meshnaapuridata.keys()))
+    #print(isanta)
+    for i in range(0,len(meshnaapuridata[isanta]["naapurit"])): #käydään vertailu läpi niin että ihan pikkumuutoksiin ei reagoida (eli viive ja db saa vähän heittää)
+        try:
+            vertaadata=isanta+viimmeshnaapuridata[isanta]["naapurit"][i]["laite"] + viimmeshnaapuridata[isanta]["naapurit"][i]["teho"][:2] + viimmeshnaapuridata[isanta]["naapurit"][i]["viive"][:3]
+        except:
+            #print("arvoa ei ole vanhassa")
+            vertaadata=""
+        uusivedata=isanta+meshnaapuridata[isanta]["naapurit"][i]["laite"] + meshnaapuridata[isanta]["naapurit"][i]["teho"][:2] + meshnaapuridata[isanta]["naapurit"][i]["viive"][:3]
+        #print("U", vertaadata)
+        #print("V", uusivedata)
+        if uusivedata != vertaadata:
+            #print("MMM")
+            muuttunut=True
+            break
     if muuttunut:
+        #print("MUUTOS")
         viimmeshnaapuridata=meshnaapuridata.copy()
         luoVisuaali()
+
 
 def tarkistaKadonneet(): # käydään läpi laitteiden viimeiset havaintoajat
     for laite in list(MNT):

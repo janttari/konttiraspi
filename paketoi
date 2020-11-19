@@ -9,5 +9,5 @@ tar -cvf tiedostot.tar ../deb/*
 ./addpayload tiedostot.tar
 rm tiedostot.tar
 chmod a+x install.sh
-mv install.sh ../asenna_konttiraspi
+mv -f install.sh ../asenna_konttiraspi
 cd ..

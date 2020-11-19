@@ -1,21 +1,27 @@
 #!/usr/bin/env python3
 '''Tämä on asiakas-esimerkki joka ottaa yhteyttä flaskin socket-palvelimelle'''
-import subprocess, json, time, threading, websocket
+import subprocess, json, time, datetime, threading, websocket
 from configobj import ConfigObj
 config=ConfigObj('/boot/asetukset.txt')
+
+def lokita(data, flush=True):
+    with open("/home/pi/batloki", "a") as kirj:
+        aika=str(datetime.datetime.now())
+        kirj.write(aika+" "+data+"\n")
+        print(aika+" "+data, flush=flush)
 
 def kyseleNaapurit(): #kyselee batmanin näkemät naapurilaitteet # [('00:c0:ca:98:8f:9f', ' 0.500', ' 7.8'), ('00:c0:ca:98:8e:ed', ' 0.190', '35.6')]
     tamaLaiteMAC = subprocess.getoutput('sudo batctl n|grep -o "MAC:.*"|cut -d "/" -f2|cut -d " " -f1')
     tamaLaiteIP = subprocess.getoutput('ifconfig |grep bat0 -A1|tail -n 1|grep -o "inet.*" | cut -d " " -f 2') #vittu mitä paskaa, fiksaa tää :D
     naapuritraaka = subprocess.getoutput('sudo batctl n -H').split("\n")
-    jrivi='{"laite": "'+config.get("mesh_name")+'", "mac": "'+tamaLaiteMAC+'", "ip": "'+tamaLaiteIP+'", "data":  ['
+    jrivi='{"laite": "'+config.get("mesh_name")+'", "mac": "'+tamaLaiteMAC+'", "ip": "'+tamaLaiteIP+'", "data": ['
     for n in naapuritraaka:
         nmac = n[0:17]
         nviive = n[19:26]
         nteho = n[36:40]
         if len(nmac)>0:
             jrivi+='{"mac": "'+nmac+'", "viive": "'+nviive+'", "teho": "'+nteho+'"},'
-    if jrivi [:-1] != '[':
+    if jrivi [-1] != '[':
         jrivi=jrivi[:-1]
     jrivi=jrivi+']}'
     #print(jrivi)
@@ -38,31 +44,34 @@ class WsAsiakas(): #------------------------------------------------------------
         self.ws.run_forever()
 
     def on_message(self, message):
+        lokita("MSG "+str(message))
         pass
 
     def on_error(self, error):
         self.socketok=False
-        print("SOCK ERR", error, flush=True)
+        lokita("SOCK ERR "+str(error), flush=True)
         pass
 
     def on_close(self, ws):
-        pass
+        lokita("CLOSE", flush=True)
 
     def on_open(self):
         self.socketok=True
-        print("SOCK OPEN")
+        lokita("SOCK OPEN", flush=True)
         pass
 
     def lahetaWs(self, sanoma):
         jsanoma=json.loads(sanoma)
-
+        lokita("LAHETA", flush=True)
         try:
             self.ws.send(sanoma)
         except: #jos lähetys ei onnistu
+            lokita("ERR send", flush=True)
+            self.socketok=False
             self.reconnect() #Pyydetään avaamaan ws uudelleen
 
     def reconnect(self): #avaa ws uudelleen
-        print("SOCKET RECONN", flush=True)
+        lokita("SOCKET RECONN", flush=True)
         self.t.join()
         time.sleep(10)
         self.t=threading.Thread(target=self.wsYhteys)

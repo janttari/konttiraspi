@@ -50,6 +50,7 @@ ws.onmessage = function(event) {
         }
 }
 </script>
+<a href="batnaapurit/">[Batnaapurit]</a>
 <a href="asiakashallinta/">[Asiakashallinta]</a> 
 <a href="kuukausiraportit/">[Kuukausiraportit]</a>
 <a href="rele.php">[RELE_TESTI]</a>
