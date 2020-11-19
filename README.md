@@ -64,3 +64,10 @@ HUOM! Yhteyksien luominen käynnistyksen jälkeen ja yhteyden katkettua voi kest
 **konttiraspi-sahkomittari-server**  
 * palvelee selainta portissa 80
 
+
+-------
+TODO:
+
+** /www/batnaapurit/index.html ws uudelleenyhdistäminen automaattiseksi  
+  
+
