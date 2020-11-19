@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 from flask_socketio import SocketIO, emit
 from flask import Flask, render_template, url_for, copy_current_request_context, request
+from engineio.payload import Payload
 import time, threading, logging, sys, matplotlib, json, os
 import networkx as nx #emuloi kontti-raspberryjen MESH-verkkoa jossa raspit raportoi naapuri laitteistaan tälle serverille
 import matplotlib.pyplot as plt
 from configobj import ConfigObj
+Payload.max_decode_packets = 500
 
 config=ConfigObj('/boot/asetukset.txt')
 skriptinHakemisto=os.path.dirname(os.path.realpath(__file__))
@@ -99,6 +101,7 @@ class FlaskPalvelu:
         @self.socketio.on('naapuri_message', namespace='/meshraspi') #client lähettää tietoa naapureistaan
         def __receiv_message(data):
             jdata=json.loads(data)
+            print(jdata)
             isantaNimi=jdata["laite"]
             isantaIP=jdata["ip"]
             isantaMAC=jdata["mac"]
