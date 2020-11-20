@@ -1,7 +1,7 @@
 # konttiraspi  
 ## Asennus:  
-Asenna Raspbian OS Lite muistitikulle ja sen jälkeen siirrä tiedostot  
-**asenna_konttiraspi** ja **asetukset.txt** muistikortin /-boot osiolle.  
+Asenna Raspbian OS Lite muistitikulle ja sen jälkeen siirrä tiedosto  
+**asenna_konttiraspi** muistikortin /-boot osiolle.  
 (Tässä vaiheessa kortin voi kloonata halutessaan helpottaa muiden Raspien asennusta)  
   
 Kirjaudu Raspille ja:  
@@ -11,6 +11,9 @@ Kirjaudu Raspille ja:
   
 Valitse asennettavat palvelut:  
 ![](https://raw.githubusercontent.com/janttari/konttiraspi/main/doc/konttiraspivalikko.png)  
+
+Muista editoita tietosto **/boot/asetukset.txt**  
+
 
 
 ## Päivittäminen:  
