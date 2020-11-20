@@ -5,8 +5,10 @@ Asenna Raspbian OS Lite muistitikulle ja tee tiedosto ssh boot-osiolle.
 
 Kirjaudu Raspille ja:  
 
+    sudo apt update
     cd ~
     wget https://raw.githubusercontent.com/janttari/konttiraspi/main/asenna_konttiraspi  
+    chmod a+x asenna_konttiraspi  
     ./asenna_konttiraspi  
   
 Valitse asennettavat palvelut:  
@@ -25,6 +27,7 @@ Lataaminen päätteessä:
     cd ~ 
     rm asenna_konttiraspi #Poista vanha tiedosto jos sellainen on.  
     wget https://raw.githubusercontent.com/janttari/konttiraspi/main/asenna_konttiraspi  
+    chmod a+x asenna_konttiraspi  
   
 
 Jos haluat muuttaa asennuksen ominaisuuksia (valikot):  
