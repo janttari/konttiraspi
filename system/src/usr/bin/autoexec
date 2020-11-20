@@ -47,6 +47,14 @@ fi
 
 ### batnaapuri client ###
 if [[ "$batnaapuri_type" == "client" ]]; then
+    while true; do # !!!ODOTTAA VERKKOA. FIKSAA BATNAAPURIT-CLIENTIN WEBSOCKET KUNTOON
+        if ping -c 1 -W 1 $mesh_gateway &> /dev/null; then
+            break
+        fi
+    echo -e ".\c"
+    sleep 1
+    done
+
     echo "* batnaapuri  client up" | ts '[%Y-%m-%d %H:%M:%S autoexec       ]' >>$LOKITIEDOSTO
     /opt/konttiraspi/batnaapuri-client/batnaapuri-client.py 2>&1 |ts '[%Y-%m-%d %H:%M:%S bn-client      ]' >>$LOKITIEDOSTO &
     sleep 0.3
