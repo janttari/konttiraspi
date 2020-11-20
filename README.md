@@ -22,7 +22,7 @@ Säädä asetukset:
 
 
 ## Päivittäminen:  
-Lataa uusi **asenna_konttiraspi** muistikortin /boot osiolle.  
+ 
 Lataaminen päätteessä:
   
     cd ~ 
@@ -32,13 +32,11 @@ Lataaminen päätteessä:
   
 
 Jos haluat muuttaa asennuksen ominaisuuksia (valikot):  
-
-    cd ~    
+ 
     ./asenna_konttiraspi
   
-Jos haluat vain päivittää olemassa olevat ominaisuudet (ilman valikoita):
+Jos haluat vain päivittää olemassa olevat ominaisuudet (ilman valikoita pelkkä päivitys):
   
-    cd ~  
     ./asenna_konttiraspi -u
   
 Asennuksen ja päivityksen jälkeen uudelleenkäynnistys pitää tehdä:  
