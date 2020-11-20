@@ -1,6 +1,6 @@
 #!/bin/bash
 ./paketoi
-tree -C --dirsfirst ~/konttiraspit | aha --black --title "konttiraspit"> doc/tree.html
-wkhtmltoimage --quality 30 doc/tree.html doc/tree.png
+#tree -C --dirsfirst ~/konttiraspit | aha --black --title "konttiraspit"> doc/tree.html
+#wkhtmltoimage --quality 30 doc/tree.html doc/tree.png
 git add * && git commit -m "gup" && git push
 
