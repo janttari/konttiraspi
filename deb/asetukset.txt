@@ -8,26 +8,26 @@
 # *BS Batnaapurit server
 
 # MESH-asetukset 
-mesh_type=gateway #client|gateway| *MC *MG
-mesh_ip=192.168.234.1 #Tämän laitteen mesh ip *MC *MG
+mesh_type=client #client|gateway| *MC *MG
+mesh_ip=192.168.234.2 #Tämän laitteen mesh ip *MC *MG
 mesh_name=fo-t-raspi333 #Tämän laitteen nimi mesh-verkossa *MC *MG *SC
 mesh_gateway=192.168.234.1 #Gatewayn ip *MC
 mesh_broadcast=192.168.243.255 # *MC *MG
 mesh_mhz=2462 #Taajuus jolle mesh-verkko luodaan *MC *MG
 mesh_netname=mesh #Mesh-verkon nimi *MC *MG
-mesh_country=XX #Mesh-verkon maa. käytä XX jo wifiteholla tehty tietokanta 2 watille *MC *MG
-mesh_txpower=30 #Lähetysteho *MC *MG
+mesh_country=FI #Mesh-verkon maa. käytä XX jo wifiteholla tehty tietokanta 2 watille *MC *MG
+mesh_txpower=20 #Lähetysteho *MC *MG
 mesh_device=wlan1 #Wifi-laite, jota mesh käyttää *MC *MG
 mesh_mtu=1500 # *MC *MG
 
 ## batnaapuri-asetukset *Client *Server
-batnaapuri_type=server #client|server # *BC *BS
+batnaapuri_type=client #client|server # *BC *BS
 batnaapuri_server=ws://192.168.234.1:8000 #batnaapuri-palvelin *BC
 batnaapuri_portti=8000 #palvellaan batnaapuri-serveriä tässä portissa *BS
 
 ## Sähkömittari-asetukset *Client *Server
 sm_type=client #server|client *SS *SC
-sm_host=palvelin=ws://192.168.4.222:8888 #Otetaan yhteyttä tähän sähkömittari-palvelimeen *SC
+sm_host=ws://192.168.234.1:8888 #Otetaan yhteyttä tähän sähkömittari-palvelimeen *SC
 sm_serial=/dev/ttyUSB0 #sarjaportti jossa arduino kiinni *SC
 sm_imp=1000 #sahkomittari antaa impulsseja per kwh *SC
 sm_pulssipysyva=/opt/konttiraspi/sahkomittari-client/pulssi #Tähän tiedostoon tallennetaan pysyvä pulssilukema *SC

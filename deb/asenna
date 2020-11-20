@@ -59,10 +59,13 @@ else #jos -u
 fi
 
 echo asennetaan konttiraspi-system
+sudo apt install -y python3-configobj python3-pip git
 sudo dpkg -i konttiraspi-system.deb
+sudo raspi-config nonint do_wifi_country FI
 
 if [[ $a1 == 1 ]]; then
     echo asennetaan konttiraspi-mesh-client
+    sudo apt install -y batctl
     sudo dpkg -i konttiraspi-mesh-client.deb
 else
     if [[ "$k1" == "on" ]]; then
@@ -73,7 +76,10 @@ fi
 
 if [[ $a2 == 1 ]]; then
     echo asennetaan konttiraspi-mesh-gateway
+    sudo apt install -y  batctl libatlas-base-dev libopenjp2-7-dev libtiff5
+    sudo pip3 install networkx matplotlib
     sudo dpkg -i konttiraspi-mesh-gateway.deb
+    sudo chmod -R 777 /opt/konttiraspi/sahkomittari-server/data/
 else
     if [[ "$k2" == "on" ]]; then
         echo poistetaan konttiraspi-mesh-gateway
@@ -120,6 +126,7 @@ fi
 
 ### nginx conffi jo tarpeellista ####
 if [[ $nginx == 1 ]]; then
+    sudo apt -y install -y nginx php7.3 php7.3-fpm php7.3-sqlite3 sqlite3
     sudo cp nginx.txt /etc/nginx/sites-available/default
 fi
 
