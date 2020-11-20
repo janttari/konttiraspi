@@ -1,18 +1,20 @@
 # konttiraspi  
 ## Asennus:  
-Asenna Raspbian OS Lite muistitikulle ja sen jälkeen siirrä tiedosto  
-**asenna_konttiraspi** muistikortin /-boot osiolle.  
-(Tässä vaiheessa kortin voi kloonata halutessaan helpottaa muiden Raspien asennusta)  
-  
+Asenna Raspbian OS Lite muistitikulle ja tee tiedosto ssh boot-osiolle.
+
+
 Kirjaudu Raspille ja:  
 
-    cd /boot  
+    cd ~
+    wget https://raw.githubusercontent.com/janttari/konttiraspi/main/asenna_konttiraspi  
     ./asenna_konttiraspi  
   
 Valitse asennettavat palvelut:  
 ![](https://raw.githubusercontent.com/janttari/konttiraspi/main/doc/konttiraspivalikko.png)  
 
-Muista editoita tietosto **/boot/asetukset.txt**  
+
+    sudo nano /boot/asetukset.txt
+    
 
 
 
@@ -20,19 +22,19 @@ Muista editoita tietosto **/boot/asetukset.txt**
 Lataa uusi **asenna_konttiraspi** muistikortin /boot osiolle.  
 Lataaminen päätteessä:
   
-    cd /boot  
+    cd ~ 
     rm asenna_konttiraspi #Poista vanha tiedosto jos sellainen on.  
     wget https://raw.githubusercontent.com/janttari/konttiraspi/main/asenna_konttiraspi  
   
 
 Jos haluat muuttaa asennuksen ominaisuuksia (valikot):  
 
-    cd /boot    
+    cd ~    
     ./asenna_konttiraspi
   
 Jos haluat vain päivittää olemassa olevat ominaisuudet (ilman valikoita):
   
-    cd /boot  
+    cd ~  
     ./asenna_konttiraspi -u
   
 Asennuksen ja päivityksen jälkeen uudelleenkäynnistys pitää tehdä:  
@@ -71,6 +73,7 @@ HUOM! Yhteyksien luominen käynnistyksen jälkeen ja yhteyden katkettua voi kest
 -------
 TODO:
 
-** /www/batnaapurit/index.html ws uudelleenyhdistäminen automaattiseksi  
+** websocketit asynciolle  
+
   
 
