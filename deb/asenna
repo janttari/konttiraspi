@@ -66,6 +66,7 @@ sudo raspi-config nonint do_wifi_country FI
 if [[ $a1 == 1 ]]; then
     echo asennetaan konttiraspi-mesh-client
     sudo apt install -y batctl
+    sudo pip3 install websocket-client
     sudo dpkg -i konttiraspi-mesh-client.deb
 else
     if [[ "$k1" == "on" ]]; then
@@ -92,6 +93,8 @@ fi
 if [[ $a3 == 1 ]]; then
     echo asennetaan konttiraspi-sahkomittari-client
     sudo dpkg -i konttiraspi-sahkomittari-client.deb
+    sudo apt -y install python3-serial
+    sudo pip3 install websocket-client adafruit_dht
 else
     if [[ "$k3" == "on" ]]; then
         echo poistetaan konttiraspi-sahkomittari-client
