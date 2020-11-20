@@ -14,7 +14,8 @@ Kirjaudu Raspille ja:
 Valitse asennettavat palvelut:  
 ![](https://raw.githubusercontent.com/janttari/konttiraspi/main/doc/konttiraspivalikko.png)  
 
-
+Säädä asetukset:
+  
     sudo nano /boot/asetukset.txt
     
 
