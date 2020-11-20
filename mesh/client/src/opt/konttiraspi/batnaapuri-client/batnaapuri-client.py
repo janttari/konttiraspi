@@ -24,7 +24,7 @@ def kyseleNaapurit(): #kyselee batmanin näkemät naapurilaitteet # [('00:c0:ca:
     if jrivi [-1] != '[':
         jrivi=jrivi[:-1]
     jrivi=jrivi+']}'
-    #print(jrivi)
+    #lokita("KYSNAAPURIT PALAUTTAA: "+jrivi)
     return jrivi
 
 class WsAsiakas(): #-----------------------------------------------------------------------------------------------------
@@ -52,7 +52,8 @@ class WsAsiakas(): #------------------------------------------------------------
         lokita("SOCK ERR "+str(error), flush=True)
         pass
 
-    def on_close(self, ws):
+    def on_close(self):
+        self.socketok=False
         lokita("CLOSE", flush=True)
 
     def on_open(self):
@@ -76,6 +77,7 @@ class WsAsiakas(): #------------------------------------------------------------
         time.sleep(10)
         self.t=threading.Thread(target=self.wsYhteys)
         self.t.start()
+
 #------------------------------------------------------------------------------------------------------------------------------------
 if __name__ == "__main__":
     wsAsiakas=WsAsiakas()
@@ -85,4 +87,5 @@ if __name__ == "__main__":
         if k%10 == 0: #muuta tämä hakemaan configista. 60 sek vois olla ok
             naap=kyseleNaapurit()
             wsAsiakas.lahetaWs(naap)
+        #lokita("MAIN "+str(k), flush=True)
         time.sleep(1)
