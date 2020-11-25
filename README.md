@@ -1,9 +1,8 @@
 # konttiraspi  
 ## Asennus:  
-Asenna Raspbian OS Lite muistitikulle ja tee tiedosto ssh boot-osiolle.
-
-
-Kirjaudu Raspille ja:  
+Asenna **[Raspberry Pi OS Lite](https://www.raspberrypi.org/software/operating-systems/)**  muistitikulle ja tee tiedosto **ssh** boot-osiolle.
+  
+Kirjaudu Raspille SSH:lla ja:  
 
     sudo apt update
     cd ~
