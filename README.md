@@ -46,6 +46,10 @@ Asennuksen ja päivityksen jälkeen uudelleenkäynnistys pitää tehdä:
 Kaikki asetukset on tiedostossa **[/boot/asetukset.txt](deb/asetukset.txt)**    
 Tarkista ne huolellisesti.  
   
+Esimerkki [GATEWAY](doc/asetukset_gateway.jpeg)** 
+Esimerkki [CLIENT](doc/asetukset_client.jpeg)** 
+  
+  
 
 -------
 HUOM! Yhteyksien luominen käynnistyksen jälkeen ja yhteyden katkettua voi kestää useamman minuutin!  
