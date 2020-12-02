@@ -11,8 +11,8 @@
         $vuosi=$_GET["vuosi"];
         $kuukausi=$_GET["kuukausi"];
         date_default_timezone_set('Europe/Helsinki');
-        $db_asiakkaat = new SQLite3('/opt/sahkomittari-server/data/asiakkaat.db');
-        $db_kulutus = new SQLite3('/opt/sahkomittari-server/data/kulutus.db');
+        $db_asiakkaat = new SQLite3('/opt/konttiraspi/sahkomittari-server/data/asiakkaat.db');
+        $db_kulutus = new SQLite3('/opt/konttiraspi/sahkomittari-server/data/kulutus.db');
         $sql = "SELECT * from asiakkaat";
         $ret_asiakkaat = $db_asiakkaat->query($sql);
         echo "<pre>";
