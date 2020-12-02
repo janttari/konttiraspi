@@ -80,7 +80,6 @@ if [[ $a2 == 1 ]]; then
     sudo apt install -y  batctl libatlas-base-dev libopenjp2-7-dev libtiff5
     sudo pip3 install networkx matplotlib
     sudo dpkg -i konttiraspi-mesh-gateway.deb
-    sudo chmod -R 777 /opt/konttiraspi/sahkomittari-server/data/
 else
     if [[ "$k2" == "on" ]]; then
         echo poistetaan konttiraspi-mesh-gateway
@@ -105,6 +104,7 @@ fi
 if [[ $a4 == 1 ]]; then
     echo asennetaan konttiraspi-sahkomittari-server
     sudo dpkg -i konttiraspi-sahkomittari-server.deb
+    sudo chmod -R 777 /opt/konttiraspi/sahkomittari-server/data/
     nginx=1
 else
     if [[ "$k4" == "on" ]]; then
