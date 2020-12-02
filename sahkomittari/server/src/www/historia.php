@@ -4,7 +4,7 @@ echo "<a href='index.php'>[palaa]</a><br>";
 echo "Historia asiakkaalle: ".$id. "<br><br><pre>";
 echo "<pre>";
 echo "aikaleima;id;kwh;pulssit;tuntikohtainen;lampo;kosteus;ulkolampo;ulkokosteus;\n";
-        $db_kulutus = new SQLite3('/opt/sahkomittari-server/data/kulutus.db');
+        $db_kulutus = new SQLite3('/opt/konttiraspi/sahkomittari-server/data/kulutus.db');
         $sql = "SELECT * from kulutus WHERE id='".$id."' ORDER BY aikaleima";
         $kys_kulutus = $db_kulutus->query($sql);
         while($ret_kulutus = $kys_kulutus->fetchArray(SQLITE3_ASSOC)) {
