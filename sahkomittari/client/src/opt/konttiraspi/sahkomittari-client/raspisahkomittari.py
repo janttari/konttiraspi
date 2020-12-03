@@ -64,15 +64,9 @@ class Mittaaja(): # TÄMÄ LUOKKA HOITAA VARSINAISEN PINNIN LUKEMISEN JA KULUTUK
                 try:
                     if sdata[0] == "a" or "r":
                         palat=sdata.split(";")
-                        pulssit=int(palat[1])
+                        #arduino lahettaa nyt  joka pulssi ni ei tartte laskea
                         vali=float(palat[2])/1000
-                        if self.edArduinonPulssiMaara != 0:
-                            lisays=pulssit-self.edArduinonPulssiMaara
-                            self.edArduinonPulssiMaara+=lisays
-                            self.pulssilaskuri+=lisays
-                        else:
-                            self.edArduinonPulssiMaara= pulssit
-                            lisays=0
+                        self.pulssilaskuri+=1
                         if time.time()-self.viimWsLahetysAika >= self.maxAliveTiheys or self.viimWsLahetysAika==0: #ALIVE
                             self.viimWsLahetysAika=time.time()
                             self.viimWsPulssiMaara=self.pulssilaskuri

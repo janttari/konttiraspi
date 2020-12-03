@@ -7,7 +7,7 @@ from datetime import datetime
 import time, threading, logging, sys, os, json, logging, urllib.parse, sqlite3
 DEBUG=False
 
-kulutusTietokanta=os.getcwd()+"/opt/konttiraspi/sahkomittari-server/data/kulutus.db"
+kulutusTietokanta="/opt/konttiraspi/sahkomittari-server/data/kulutus.db"
 
 viimTallennusaika="" #Tähän kirjoitetaan milloin pysyvät tiedostot on viimeksi tallennettu HH
 kwhMuisti={} # {'fo-t-2332a': '0.45250'}
@@ -20,17 +20,17 @@ def tallennaPysyvat(): # Tallennetaan kulutuslukemat pysyvään paikalliseen tie
     aika=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     ulkolampo=-127.0 #haetaan tää lopullisessa versiossa tässä kohtaa serverin mittarilta?
     ulkokosteus=-127.0
-    conn = sqlite3.connect("/opt/konttiraspi/sahkomittari-server/data/kulutus.db")
+    conn = sqlite3.connect(kulutusTietokanta)
     c = conn.cursor()
     for asiakasID in kwhMuisti: #käydään kaikki asiakkaa läpi yksi kerrallaan #TARKISTA TÄÄ OSUUS, LASKEE VÄÄRIN?
-        kys=c.execute('SELECT kwh FROM kulutus WHERE ID="'+asiakasID+'" ORDER BY aikaleima DESC LIMIT 1') #lasketaan ensin tunnin aikana tapahtunut kulutus vertaamalla nykyistä viimeksi tietokantaan tallennettuun lukemaan
+        kys=c.execute('SELECT kwh FROM kulutus WHERE id="'+asiakasID+'" ORDER BY aikaleima DESC LIMIT 1') #lasketaan ensin tunnin aikana tapahtunut kulutus vertaamalla nykyistä viimeksi tietokantaan tallennettuun lukemaan
         edtunti=None
         for i in kys:
             edtunti=str(i[0])
         if edtunti is None: #tietokannassa ei vielä ole kulutustietoa...
             edtunti=float(kwhMuisti[asiakasID]) #...joten kaikki kulutus on tälle tunnille
         tuntikohtainen=str(float(kwhMuisti[asiakasID])-float(edtunti))
-        c.execute('INSERT into kulutus(aikaleima, lahettaja, kwh, pulssit, tuntikohtainen, lampo, kosteus, ulkolampo, ulkokosteus) VALUES("'+aika+'", "'+asiakasID+'", '+str(kwhMuisti[asiakasID])+', '+str(pulssiMuisti[asiakasID])+', '+str(tuntikohtainen)+', '+str(lampoMuisti[asiakasID])+', '+str(kosteusMuisti[asiakasID])+', '+str(ulkolampo)+', '+str(ulkokosteus)+')')
+        c.execute('INSERT into kulutus(aikaleima, id, kwh, pulssit, tuntikohtainen, lampo, kosteus, ulkolampo, ulkokosteus) VALUES("'+aika+'", "'+asiakasID+'", '+str(kwhMuisti[asiakasID])+', '+str(pulssiMuisti[asiakasID])+', '+str(tuntikohtainen)+', '+str(lampoMuisti[asiakasID])+', '+str(kosteusMuisti[asiakasID])+', '+str(ulkolampo)+', '+str(ulkokosteus)+')')
     conn.commit()
     conn.close()
 #---------------------------------------------------------------------------------------------------------------------------------------------
@@ -81,7 +81,7 @@ if __name__ == "__main__":    # PÄÄOHJELMA ALKAA
     selainWs=PalveluWs(8889, selainWscallback) #websocket-palvelin selaimille
     mittariWs=PalveluWs(8888, mittariWscallback) #websocket-palvelin mittari-raspeille
 
-    conn = sqlite3.connect("/opt/konttiraspi/sahkomittari-server/data/kulutus.db")
+    conn = sqlite3.connect(kulutusTietokanta)
     c = conn.cursor()
     c.execute('CREATE TABLE IF NOT EXISTS kulutus (aikaleima DATE, id TEXT , kwh REAL, pulssit INTEGER, tuntikohtainen REAL, lampo REAL, kosteus REAL, ulkolampo REAL, ulkokosteus REAL)')
     conn.commit()

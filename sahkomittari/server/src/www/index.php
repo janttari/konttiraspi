@@ -74,7 +74,7 @@ ws.onmessage = function(event) {
     $sql = "SELECT * from asiakkaat";
     $ret_asiakkaat = $db_asiakkaat->query($sql);
     while($row = $ret_asiakkaat->fetchArray(SQLITE3_ASSOC) ) {
-        $sql = "SELECT * from kulutus WHERE ID='".$row['id']."' ORDER BY aikaleima DESC LIMIT 1";
+        $sql = "SELECT * from kulutus WHERE id='".$row['id']."' ORDER BY aikaleima DESC LIMIT 1";
         $ret_kulutus = $db_kulutus->query($sql);
         $row_kulutus = $ret_kulutus->fetchArray(SQLITE3_ASSOC);
         $kwh=$row_kulutus['kwh'];
