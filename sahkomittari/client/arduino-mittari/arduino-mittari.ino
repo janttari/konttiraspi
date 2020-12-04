@@ -1,11 +1,9 @@
 /*
+ * ANALOG READ DISABLOITU TÄSSÄ VERSIOSSA!
     HUOM! KYTKE A0 HYPPYLANGALLA GND JOS PALOHÄLYTINTÄ EI OLE KYTKETTY SIIHEN!
 
     Laskee sähkömittarin S0 pulsseja ja tulostaa dataa sarjaporttiin.
 
-    AJASTETTU SANOMA JOS EI PULSSEJA OLE HETKEEN SAATU:
-    a;32;333;6745;
-    jossa a on sanoman tyyppi (ajastin), 32 on pulssien määrä, 333 aika edellisestä pulssista ms ja 6745 Arduinon sisäinen millis().
 
     REAALIAIKAINEN TIETO KUN PULSSI SAADAAN:
     r;32;333;6745
@@ -22,9 +20,8 @@
 
 */
 
-#define VERSIO "2020-02-03"
+#define VERSIO "2020-02-04"
 const byte relePinnit[] = {4, 5, 6, 7, 8, 9, 10, 11}; // näissä pinneissä voi olla rele HUOMAA LÄHETTÄESSÄ BITTIJÄRJESTYS!
-#define LAHETYSVALI 1000 //Lähetetään sarjaporttiin nn millisekunnin välein silloinkin kun reaaliaikaista mittaustietoa ei tule
 
 typedef struct inputPinnit { //pinni sekä sallittu alue jonka sisällä tulon arvon pitää olla jottei se hälytä
   int pinni;
@@ -66,10 +63,7 @@ void setup() {
 }
 
 void loop() {
-  if (millis() - viimLahetys > LAHETYSVALI) { //Jos mittarilta ei ole tullut pulsseja, lähetetään silti säännöllisin väliajoin lukema, jotta reaaliaikaisen kulutuksen laskusuunta nähdään.
-    viimLahetys = millis();
-    Serial.println("a;0;" + String(millis() - viimPulssiAika) + ";" + String(millis())); //Sanoma **a** ajastettu (kertoo ajan viimeisestä pulssista)
-  }
+
   wdt_reset(); //Watchdogille elossaolosta ilmoitus
 
   if (Serial.available() > 0) { //jos sarjaportista on arduinon suuntaan tulevaa dataa
@@ -85,28 +79,28 @@ void loop() {
       }
     }
   }
-  lueInput();
+ // lueInput();
   delay(50);
 }
 
-void lueInput() {
-  int pinniMaara = sizeof(inputit) / sizeof(int) / 3; //inputpinnien määrä
-  for (int i = 0; i < pinniMaara; i++) {
-    int arvo = analogRead(inputit[i].pinni);
-    //Serial.println("Luetaan pinni " + String(inputit[i].pinni) + ":" + String(arvo));
-    if (arvo < inputit[i].minimi || arvo > inputit[i].maksimi) { //hälyttää
-      inputPinniTila[i] = true;
-    }
-    else {
-      inputPinniTila[i] = false;
-    }
-    if (inputPinniTila[i] != edInputPinniTila[i]) { //jos pinnin hälytystila on muuttunut
-      Serial.println("h;" + String(i) + ";" + String(inputPinniTila[i]));
-      edInputPinniTila[i] = inputPinniTila[i];
-    }
+//void lueInput() {
+//  int pinniMaara = sizeof(inputit) / sizeof(int) / 3; //inputpinnien määrä
+//  for (int i = 0; i < pinniMaara; i++) {
+//    int arvo = analogRead(inputit[i].pinni);
+//    //Serial.println("Luetaan pinni " + String(inputit[i].pinni) + ":" + String(arvo));
+//    if (arvo < inputit[i].minimi || arvo > inputit[i].maksimi) { //hälyttää
+//      inputPinniTila[i] = true;
+//    }
+//    else {
+//      inputPinniTila[i] = false;
+//    }
+//    if (inputPinniTila[i] != edInputPinniTila[i]) { //jos pinnin hälytystila on muuttunut
+//      Serial.println("h;" + String(i) + ";" + String(inputPinniTila[i]));
+//      edInputPinniTila[i] = inputPinniTila[i];
+//    }
+//  }
+//}
 
-  }
-}
 void onPulssi() { //tämä suoritetaan aina kun mittari-pinnin tila muuttuu joko LOW-->HIGH tai HIGH-->LOW
   bool tila = digitalRead(mittariPinni); //Luetaan onko pulssi tullut HIGH vai mennyt LOW
   if (tila != viimTila) { //Varmistetaan että on todella tapahtunut muutos tilassa
