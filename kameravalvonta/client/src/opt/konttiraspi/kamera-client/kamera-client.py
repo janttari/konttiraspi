@@ -48,7 +48,7 @@ MINAREA=70000 #VAADITTAVA MUUTOS KUVASSA JOKA AIHEUTTAA LIIKETUNNISTUKSEN
 RESX=1280
 RESY=720
 DELTA_TRESH=1
-SHOWVIDEO=True #NÄYTETÄÄNKÖ KUVA IKKUNASSA
+SHOWVIDEO=False #NÄYTETÄÄNKÖ KUVA IKKUNASSA
 MINMOTIONFRAMES=5 #LIIKETTÄ ESIINNYTTÄVÄ VÄHINTÄÄN N FRAMESSA JOTTA TULKITAAN LIIKKEEKSI
 ##################################################################################
 
@@ -59,7 +59,7 @@ async def lahetaPalvelimelle(tiedosto, soittolista, extinf): #POST ts-tiedosto p
     with open(tiedosto, 'rb') as f:
         async with aiohttp.ClientSession() as session:
             async with session.post(uploadurl, data={'video': f, 'soittolista': soittolista, 'extinf': extinf}) as response:
-                #os.remove(tiedosto)
+                os.remove(tiedosto)
                 return await response.text()
 
 def valvoM3u8(m3u8): # valvoo  m3u8-tiedostojen ilmesymisiä ja kasvamisia
@@ -84,7 +84,7 @@ def valvoM3u8(m3u8): # valvoo  m3u8-tiedostojen ilmesymisiä ja kasvamisia
                         #palanumero+=1
             if rivi == "#EXT-X-ENDLIST": #ffmpeg on kirjoittanut HLS:n valmiiksi
                 valmis=True
-                #os.remove(m3u8)
+                os.remove(m3u8)
         time.sleep(0.5)
 
 #OPENCV MAIN-LOOPPI

@@ -133,11 +133,11 @@ fi
 if [[ $a5 == 1 ]]; then
     echo asennetaan konttiraspi-kamera-client
     #apt install -y python3-numpy
-    sudo apt install -y python3-opencv
-    sudo pip3 install ffmpeg-python aiohttp
+    sudo apt install -y python3-opencv ffmpeg
+    sudo pip3 install ffmpeg-python aiohttp imutils opencv-python
     sudo dpkg -i konttiraspi-kamera-client.deb
     # sudo pip3 install imutils opencv-python  ##pois?
-    # sudo apt install -y libatlas-base-dev libjasper-dev libqtgui4  libqt4-test libhdf5-dev libilmbase23
+    sudo apt install -y libatlas-base-dev libjasper-dev libqtgui4  libqt4-test libhdf5-dev libilmbase23
 else
     if [[ "$k5" == "on" ]]; then
         echo poistetaan konttiraspi-kamera-client

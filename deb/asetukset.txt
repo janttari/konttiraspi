@@ -39,8 +39,8 @@ sm_maxtiheys=3 #lähetetään enintään näin monen sekunnin välein lukemia pa
 #sm_dhtpin=4 #Lämpömittari raspin tässä pinnissä *SC
 
 ## Kameravalvonta-asetukset
-cam_type=server #client|server *CC *CS
+cam_type=client #client|server *CC *CS
 cam_serverport=5432 #Palvellaan tässä portissa sekä selainta, että kamera-clientejä *CS
-cam_serverurl=http://localhost:5432/video #Yhdistä tähän osoitteeseen kamera-palvelimelle *CC
+cam_serverurl=http://192.168.234.1:5432/video #Yhdistä tähän osoitteeseen kamera-palvelimelle *CC
 cam_clienttmpdir=/dev/shm/kam/hls #Clientin tilapäinen hakemisto videoille *CC
 cam_device=/dev/video0 # *CC
