@@ -7,6 +7,7 @@ Kirjaudu Raspille SSH:lla ja:
     sudo apt update
     cd ~
     wget https://raw.githubusercontent.com/janttari/konttiraspi/main/asenna_konttiraspi  
+    #tai haluttu versio:  wget https://raw.githubusercontent.com/janttari/konttiraspi/0.02/asenna_konttiraspi  
     chmod a+x asenna_konttiraspi  
     ./asenna_konttiraspi  
   
