@@ -19,13 +19,21 @@ k3=$(sudo dpkg-query -l |grep konttiraspi-sahkomittari-client)
 if [[ ${#k3} -gt 0 ]];then k3="on"; else k3="off"; fi
 k4=$(sudo dpkg-query -l |grep konttiraspi-sahkomittari-server)
 if [[ ${#k4} -gt 0 ]];then k4="on"; else k4="off"; fi
+k5=$(sudo dpkg-query -l |grep konttiraspi-kamera-client)
+if [[ ${#k5} -gt 0 ]];then k5="on"; else k5="off"; fi
+k6=$(sudo dpkg-query -l |grep konttiraspi-kamera-server)
+if [[ ${#k6} -gt 0 ]];then k6="on"; else k6="off"; fi
+
 
 if [[ $update != 1 ]];then
     cmd=(dialog --separate-output --checklist "valitse konttiraspi-system lisäksi asennettavat palvelut:" 22 76 16)
     options=(1 "konttiraspi-mesh-client" $k1
              2 "konttiraspi-mesh-gateway" $k2
              3 "konttiraspi-sahkomittari-client" $k3
-             4 "konttiraspi-sahkomittari-server" $k4)
+             4 "konttiraspi-sahkomittari-server" $k4
+             5 "konttiraspi-kamera-client" $k5
+             6 "konttiraspi-kamera-server" $k6)
+             
     choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
     okcancel=$?
     clear
@@ -48,6 +56,12 @@ if [[ $update != 1 ]];then
             4)
                 a4=1
                 ;;
+            5)
+                a5=1
+                ;;
+            6)
+                a6=1
+                ;;
         esac
     done
 else #jos -u
@@ -55,6 +69,8 @@ else #jos -u
     if [[ "$k2" == "on" ]]; then a2=1; fi
     if [[ "$k3" == "on" ]]; then a3=1; fi
     if [[ "$k4" == "on" ]]; then a4=1; fi
+    if [[ "$k5" == "on" ]]; then a5=1; fi
+    if [[ "$k6" == "on" ]]; then a6=1; fi
 
 fi
 
@@ -80,6 +96,7 @@ if [[ $a2 == 1 ]]; then
     sudo apt install -y  batctl libatlas-base-dev libopenjp2-7-dev libtiff5
     sudo pip3 install networkx matplotlib
     sudo dpkg -i konttiraspi-mesh-gateway.deb
+    sudo chmod -R 777 /opt/konttiraspi/sahkomittari-server/data/
 else
     if [[ "$k2" == "on" ]]; then
         echo poistetaan konttiraspi-mesh-gateway
@@ -94,6 +111,7 @@ if [[ $a3 == 1 ]]; then
     sudo dpkg -i konttiraspi-sahkomittari-client.deb
     sudo apt -y install python3-serial
     sudo pip3 install websocket-client adafruit_dht
+    #sudo pip3 install adafruit-circuitpython-dht websocket-client
 else
     if [[ "$k3" == "on" ]]; then
         echo poistetaan konttiraspi-sahkomittari-client
@@ -104,7 +122,6 @@ fi
 if [[ $a4 == 1 ]]; then
     echo asennetaan konttiraspi-sahkomittari-server
     sudo dpkg -i konttiraspi-sahkomittari-server.deb
-    sudo chmod -R 777 /opt/konttiraspi/sahkomittari-server/data/
     nginx=1
 else
     if [[ "$k4" == "on" ]]; then
@@ -112,6 +129,28 @@ else
         sudo dpkg -r konttiraspi-sahkomittari-server
     fi
 fi
+
+if [[ $a5 == 1 ]]; then
+    echo asennetaan konttiraspi-kamera-client
+    sudo dpkg -i konttiraspi-kamera-client.deb
+else
+    if [[ "$k5" == "on" ]]; then
+        echo poistetaan konttiraspi-kamera-client
+        sudo dpkg -r konttiraspi-kamera-client
+    fi
+fi
+
+if [[ $a6 == 1 ]]; then
+    echo asennetaan konttiraspi-kamera-server
+    sudo dpkg -i konttiraspi-kamera-server.deb
+    nginx=1
+else
+    if [[ "$k6" == "on" ]]; then
+        echo poistetaan konttiraspi-kamera-server
+        sudo dpkg -r konttiraspi-kamera-server
+    fi
+fi
+
 
 
 #-------------------------------------------------------------------------
