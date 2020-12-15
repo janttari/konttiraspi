@@ -12,7 +12,7 @@ Kirjaudu Raspille SSH:lla ja:
     ./asenna_konttiraspi  
   
 Valitse asennettavat palvelut:  
-![](https://raw.githubusercontent.com/janttari/konttiraspi/main/doc/konttiraspivalikko.png)  
+![](https://raw.githubusercontent.com/janttari/konttiraspi/0.02/doc/konttiraspivalikko.png)  
 
 Säädä asetukset:
   
