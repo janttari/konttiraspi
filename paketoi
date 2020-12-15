@@ -3,6 +3,8 @@ dpkg-deb --build sahkomittari/client/src deb/konttiraspi-sahkomittari-client.deb
 dpkg-deb --build sahkomittari/server/src deb/konttiraspi-sahkomittari-server.deb
 dpkg-deb --build mesh/client/src deb/konttiraspi-mesh-client.deb
 dpkg-deb --build mesh/gateway/src deb/konttiraspi-mesh-gateway.deb
+dpkg-deb --build kameravalvonta/client/src deb/konttiraspi-kamera-client.deb
+dpkg-deb --build kameravalvonta/server/src deb/konttiraspi-kamera-server.deb
 dpkg-deb --build system/src deb/konttiraspi-system.deb
 cd pakettityokalut
 tar -cvf tiedostot.tar ../deb/*

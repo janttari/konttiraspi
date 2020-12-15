@@ -1,0 +1,9 @@
+Package: konttiraspi-kamera-client                                                             
+Version: 0.02                                                                                            
+Section: misc                                                                                            
+Priority: optional                                                                                       
+Architecture: all
+Depends: konttiraspi-system
+Maintainer: Jani Janttari <janttari@yandex.ru>
+Description:
+ -

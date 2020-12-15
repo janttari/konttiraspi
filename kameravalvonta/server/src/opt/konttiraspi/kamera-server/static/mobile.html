@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="fi">
+
+<head>
+  <meta charset="utf-8">
+  <title>Tallennukset</title>
+  <style type="text/css">
+    .split {
+      height: 100%;
+      width: 70%;
+      position: fixed;
+      z-index: 1;
+      top: 0;
+      overflow-x: hidden;
+      padding-top: 20px;
+    }
+
+
+    /* Control the left side */
+    .vasen {
+      left: 0;
+      background-color: rgb(95, 105, 189);
+    }
+
+    /* Control the right side */
+    .oikea {
+      right: 0;
+      background-color: rgb(187, 70, 70);
+    }
+
+    #tallennuslista {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    #tallennuslista th,
+    #tallennuslista td {
+      cursor: pointer;
+      text-align: left;
+      padding: 8px;
+      font-size: 22px;
+      color: bisque;
+    }
+
+    #tallennuslista tr:nth-child(even) {
+      background-color: #696581;
+    }
+
+    #tallennuslista tr:nth-child(odd) {
+      background-color: #b15353;
+    }
+  </style>
+  <script src="/static/js/socket.io.min.js"></script>
+  <script src="/static/js/jquery-3.5.1.min.js"></script>
+  <script src="/static/js/hls.js"></script>
+
+</head>
+
+<body>
+  <div class="split vasen">
+    <div id="filtteri">
+
+      <label for="camnimi">Kamera: </label>
+      <input id="camnimi" type="text" />
+      <label for="aikanum">Näytä uudemmat kuin:</label>
+      <input id="aikanum" name="aikanum" type="text" value="1" autofocus />
+      <select id="aikayksikko" name="aikayksikko">
+        <option value="tunti">tunti</option>
+        <option selected="selected" value="paiva">paiva</option>
+        <option value="viikko">viikko</option>
+      </select>
+
+
+      <button onclick="lahetaFiltteri()">Filtteröi</button>
+
+
+
+    </div>
+    <div id="ylapalkki">Tallennukset</div><br>
+    <table id="uudettallennukset"></table><br>
+    <table id="tallennuslista">
+      <tr>
+
+      </tr>
+    </table>
+
+  </div>
+  <div class="split oikea">
+
+    <video id="video" height="300" controls></video>
+  </div>
+
+  <script>
+    const socket = io('/selaindata');
+
+    function lisaaVideo(nimi, uri) {
+      var myHtmlContent = '<td onClick="soita(\'' + uri + '\')">' + nimi + '</td>';
+      //console.log(myHtmlContent);
+      var tableRef = document.getElementById('tallennuslista').getElementsByTagName('tbody')[0];
+      var newRow = tableRef.insertRow(0);
+      newRow.innerHTML = myHtmlContent;
+    }
+
+    function soita(uri) {
+      //console.log(uri);
+      var hls = new Hls({ debug: false, liveSyncDurationCount:50, maxBufferHole:0.1});
+      hls.loadSource(uri);
+      hls.attachMedia(video);
+      hls.on(Hls.Events.MEDIA_ATTACHED, function () {
+        video.muted = true;
+       // video.currentTime = 0.05;
+        video.play();
+      });
+    }
+
+    function tyhjennaLista() {
+      var tableRef = document.getElementById('tallennuslista').getElementsByTagName('tbody')[0];
+      tableRef.innerHTML = "";
+    }
+
+
+    function lahetaFiltteri() { //pyydetään palvelimelta filtteröity lista tallenteista
+      var filtpyynto = { "aikanum": $('#aikanum').val(), "aikayksikko": $('#aikayksikko').val(), "camnimi": $('#camnimi').val() };
+      socket.emit('selainfiltteri', filtpyynto);
+    }
+
+
+    socket.on('videolista', function (msg) { //palvelin lähetti m3u8-tiedostot
+      tyhjennaLista();
+      for (var m of msg) {
+        lisaaVideo(m["videoname"], m["videouri"]);
+      }
+
+    });
+
+    socket.on('videopush', function (msg) { //palvelin lähetti uuden m3u8:n
+      //console.log("uusi", msg);
+      lisaaVideo(msg["videoname"], msg["videouri"]);
+    });
+
+    socket.on('disconnect', function (reason){
+      console.log("socket katkaistu!");
+    });
+
+  </script>
+</body>
+
+</html>
