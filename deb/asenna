@@ -133,6 +133,7 @@ fi
 if [[ $a5 == 1 ]]; then
     echo asennetaan konttiraspi-kamera-client
     sudo dpkg -i konttiraspi-kamera-client.deb
+    sudo pip3 install imutils opencv-python
 else
     if [[ "$k5" == "on" ]]; then
         echo poistetaan konttiraspi-kamera-client
@@ -143,6 +144,7 @@ fi
 if [[ $a6 == 1 ]]; then
     echo asennetaan konttiraspi-kamera-server
     sudo dpkg -i konttiraspi-kamera-server.deb
+    sudo pip3 install aiohttp python-socketio
     nginx=1
 else
     if [[ "$k6" == "on" ]]; then

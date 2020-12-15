@@ -55,7 +55,7 @@ async def tulevaVideo(request):
     sortattulista=sorted(tslista[soittolista], key=lambda x:x[1]) #0001.ts lajitteluperuste
     with open(m3u8name,"w") as fsoittolista: #kirjoitetan itse soittolista. 
         fsoittolista.write("#EXTM3U\n#EXT-X-PLAYLIST-TYPE:VOD\n#EXT-X-TARGETDURATION:1\n#EXT-X-VERSION:4\n#EXT-X-MEDIA-SEQUENCE:0\n#EXT-X-DISCONTINUITY\n")
-    with open("static/hls/"+filename,"wb") as tiedosto:
+    with open(wwwHakemisto+"/hls/"+filename,"wb") as tiedosto:
         tiedosto.write(content)
     with open(m3u8name,"a") as fsoittolista:
         for kohde in sortattulista:
@@ -65,12 +65,11 @@ async def tulevaVideo(request):
 #anna selaimelle index.html
 async def index(request):
     """Serve the client-side application."""
-    print(request.query_string) #vois palauttaa mobiilin, jos mobiili
+    #print(request.query_string) #vois palauttaa mobiilin, jos mobiili
     if "mobiili" in request.query_string.lower():
-        print("MOBIILIHOMO")
-        with open('static/mobile.html') as f:
+        with open(wwwHakemisto+'/mobile.html') as f:
             return web.Response(text=f.read(), content_type='text/html')
-    with open('static/index.html') as f:
+    with open(wwwHakemisto+'/index.html') as f:
         return web.Response(text=f.read(), content_type='text/html')
 
 #uusi liiketapahtuma, lähetetään se kaikille selaimille
@@ -115,7 +114,7 @@ async def message(sid, data):
 async def connect(sid, environ):
     await lahetaFiltteroidyt(sid, "", "paiva", 1)
 
-app.router.add_static('/static', 'static') #staattiset tiedostot tässä hakemistossa
+app.router.add_static('/static', wwwHakemisto) #staattiset tiedostot tässä hakemistossa
 app.router.add_post("/video", tulevaVideo) #kamera-client postaa dataa tänne
 app.router.add_get('/', index) #selaimelle index.html
 

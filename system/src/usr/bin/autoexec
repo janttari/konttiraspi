@@ -63,14 +63,14 @@ fi
 ### kamera client ###
 if [[ "$cam_type" == "client" ]]; then
     echo "* kamera-client up" | ts '[%Y-%m-%d %H:%M:%S autoexec       ]' >>$LOKITIEDOSTO
-    /opt/konttiraspi/kamera-client/kamera-client.py 2>&1 |ts '[%Y-%m-%d %H:%M:%S sm-client      ]' >>$LOKITIEDOSTO &
+    /opt/konttiraspi/kamera-client/kamera-client.py 2>&1 |ts '[%Y-%m-%d %H:%M:%S cam-client     ]' >>$LOKITIEDOSTO &
     sleep 0.3
 fi
 
 ### kamera server ###
 if [[ "$cam_type" == "server" ]]; then
-    echo "* kamera-server  client up" | ts '[%Y-%m-%d %H:%M:%S autoexec       ]' >>$LOKITIEDOSTO
-    /opt/konttiraspi/kamera-server/kamera-server.py 2>&1 |ts '[%Y-%m-%d %H:%M:%S sm-client      ]' >>$LOKITIEDOSTO &
+    echo "* kamera-server up" | ts '[%Y-%m-%d %H:%M:%S autoexec       ]' >>$LOKITIEDOSTO
+    /opt/konttiraspi/kamera-server/kamera-server.py 2>&1 |ts '[%Y-%m-%d %H:%M:%S cam-server     ]' >>$LOKITIEDOSTO &
     sleep 0.3
 fi
 
