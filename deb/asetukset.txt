@@ -6,6 +6,8 @@
 # *SS Sähkömittari server
 # *BC Batnaapurit client
 # *BS Batnaapurit server
+# *CS Kamera server
+# *CC Kamera client
 
 # MESH-asetukset 
 mesh_type=client #client|gateway| *MC *MG
@@ -20,12 +22,12 @@ mesh_txpower=20 #Lähetysteho *MC *MG
 mesh_device=wlan1 #Wifi-laite, jota mesh käyttää *MC *MG
 mesh_mtu=1500 # *MC *MG
 
-## batnaapuri-asetukset *Client *Server
+## batnaapuri-asetukset
 batnaapuri_type=client #client|server # *BC *BS
 batnaapuri_server=ws://192.168.234.1:8000 #batnaapuri-palvelin *BC
 batnaapuri_portti=8000 #palvellaan batnaapuri-serveriä tässä portissa *BS
 
-## Sähkömittari-asetukset *Client *Server
+## Sähkömittari-asetukset
 sm_type=client #server|client *SS *SC
 sm_host=ws://192.168.234.1:8888 #Otetaan yhteyttä tähän sähkömittari-palvelimeen *SC
 sm_serial=/dev/ttyUSB0 #sarjaportti jossa arduino kiinni *SC
@@ -35,3 +37,10 @@ sm_alive=30 #Lähetetään nn sekunnin välein alive-viesti, jos muuta lähetet�
 sm_tallennapulssisek=600 #Pulssilukema kirjoitetaan nn sekunnin välein. *SC
 sm_maxtiheys=3 #lähetetään enintään näin monen sekunnin välein lukemia palvelimelle *SC
 #sm_dhtpin=4 #Lämpömittari raspin tässä pinnissä *SC
+
+## Kameravalvonta-asetukset
+cam_type=server #client|server *CC *CS
+cam_serverport=5432 #Palvellaan tässä portissa sekä selainta, että kamera-clientejä *CS
+cam_serverurl=http://localhost:5432/video #Yhdistä tähän osoitteeseen kamera-palvelimelle *CC
+cam_clienttmpdir=/dev/shm/kam/hls #Clientin tilapäinen hakemisto videoille *CC
+cam_device=/dev/video0 # *CC
